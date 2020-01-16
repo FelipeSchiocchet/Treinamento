@@ -11,28 +11,44 @@ dim rs
 dim records
 dim usuid
 dim usuNome
+
+function colocarDados
     stop
-        usuid = CInt(request("usuid")) 
-                if not isEmpty(request.form) then
-                end if
-                if usuid <> "" then        
-                    set rs = cn.execute("select * from usuario where usuid = "& usuid )     
-                    if not rs.eof then
-                        usuario = rs("usuario")
-                        senha = rs("senha")
-                        nome = rs("nome")
-                        endereco = rs("endereco")
-                        cidade = rs("cidade")
-                        cep = rs("cep")
-                        estadoid = rs("estadoid")
-                    end if
-                end if
-                set records = cn.execute("select * from tarefa where geradorID ="& usuid) 
-                if records.eof then
-                    geradorID = 0
-                else
-                    geradorID = records("geradorID")
-                end if
+    usuid = CInt(request("usuid")) 
+
+    if usuid <> "" then        
+        set rs = cn.execute("select * from usuario where usuid = "& usuid )     
+        if not rs.eof then
+            usuario = rs("usuario")
+            senha = rs("senha")
+            nome = rs("nome")
+            endereco = rs("endereco")
+            cidade = rs("cidade")
+            cep = rs("cep")
+            estadoid = rs("estadoid")
+        end if
+end if
+set records = cn.execute("select * from tarefa where geradorID ="& usuid) 
+if records.eof then
+    geradorID = 0
+else
+    geradorID = records("geradorID")
+end if
+    retorno = "true"
+    Response.ContentType = "application/json"
+    response.Write  "{"   
+    response.Write      """usuario"": " & usuario
+    response.Write      ",""senha"": " & senha
+    response.Write      ",""nome"": " & nome
+    response.Write      ",""endereco"": " & endereco
+    response.Write      ",""cidade"": " & cidade
+    response.Write      ",""cep"": " & cep
+    response.Write      ",""estadoid"": " & estadoid
+    response.Write  "}"
+
+end function
+
+
 function cadastrarUsuario()
 
     usuario = cstr("" & Replace(request.form("usuario"),"'","''"))

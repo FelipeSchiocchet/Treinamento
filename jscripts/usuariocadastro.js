@@ -4,14 +4,9 @@ window.addEventListener('load', function () {
         alterar.style.display = 'inline';
         deletar.style.display = 'inline';
     }
-    $.ajax({
-        type: "POST",
-        url: "ajax/usuariocadastroAjax.asp",
-        async: false,
-        data: {
-            usuid: document.getElementById("usuid").value
-        }
-    })
+    prencherdados();
+    buscaEstados(idElemento)
+
 });
 
 function limparCampos() {
@@ -32,6 +27,44 @@ function mascara(t, mask) {
     if (texto.substring(0, 1) != saida) {
         t.value += texto.substring(0, 1);
     }
+}
+
+function prencherdados() {
+    /*
+     * pegar o id do usuario
+     * fazer uma requisiçao
+     * pegar os dados de retorno
+     * prencher os formulario
+     */
+    const queryString = window.location.search;
+    console.log(queryString);
+    const urlParams = new URLSearchParams(queryString);
+    var usuid = urlParams.get("usuid");
+   return $.ajax({
+        type: "POST",
+        url: "ajax/usuariocadastroAjax.asp",
+        async: false,
+        data: {
+            fnTarget: "colocarDados",
+            usuid: usuid
+        },
+        success: function (data) {
+            debugger;
+            if (data.retorno) {
+                document.getElementById("usuario").value = "sss";
+                document.getElementById("senha").value = "sss";
+                document.getElementById("nome").value = "sss";
+                document.getElementById("endereco").value = "sss";
+                document.getElementById("cidade").value = "sss";
+                document.getElementById("cep").value = "sss";
+                document.getElementById("estadoid").value = "sss";
+                document.getElementById("geradorID").value = "sss";
+            }
+       },
+        error: function (obj, err) {
+           mostraAlerta("Servidor com erro, por favor usar mais tarde. " + err)
+       }
+    })
 }
 
 function cadastrarUsuario(event) {
@@ -55,6 +88,7 @@ function cadastrarUsuario(event) {
                 geradorID: document.getElementById("geradorID").value
             },
             success: function (retorno) {
+
                 if (retorno.sucesso == 'true') {
                     mostraAlerta("Usuário cadastrado com sucesso");
 
@@ -72,6 +106,21 @@ function cadastrarUsuario(event) {
         });
 
     }
+}
+
+function buscaEstados(idElemento) {
+    if (!idElemento) {
+        return false;
+    }
+    debugger
+    return $.ajax({
+        url: "./AspPages/estado.asp",
+        type: 'GET',
+        contentType: 'application/json',
+        success: function (data) {
+            preencheOptions(idElemento, JSON.parse(data));
+        }
+    });
 }
 
 function validarDados() {

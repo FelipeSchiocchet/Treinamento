@@ -34,7 +34,9 @@ function validarLogon() {
                 document.getElementById("senha").value = "";
             }
         },
-        error: function (obj, err) { debugger; }
+        error: function (obj, err) {
+            mostraAlerta("Servidor com erro, por favor usar mais tarde. " + err)
+        }
     });
 }
 

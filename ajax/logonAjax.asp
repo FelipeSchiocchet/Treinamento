@@ -5,7 +5,7 @@ if (Request("fnTarget") <> "") then
 end if
 
 function validarLogon()
-
+    
     dim usuario
     dim senha
     dim recordSet
