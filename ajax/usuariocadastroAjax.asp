@@ -1,6 +1,10 @@
 <!-- #include file = "../configs/config.asp" -->
 <!-- #include file = "../class/validacao.asp" -->
 <% 
+Response.CodePage = 65001
+Response.CharSet = "UTF-8"
+Response.ContentType = "application/json"
+
 if (Request("fnTarget") <> "") then
     Execute(Request("fnTarget") & "()")
 end if
@@ -11,9 +15,34 @@ dim rs
 dim records
 dim usuid
 dim usuNome
+        
+
+function buscarEstados
+   sqlEst = "SELECT * FROM [treinamento].[dbo].[estado]"
+    Set recordSet=Server.CreateObject("ADODB.recordset")
+    recordSet.Open sqlEst, cn,&H0001
+
+    response.Write "{"
+    response.Write """Estados"":["
+
+    Do While (not recordSet.EOF)
+        response.Write  "{"
+        response.Write      """estadoid"": " & recordSet("estadoid")
+        response.Write      ",""nome"": """ & recordSet("nome") & """"
+        response.Write  "}"
+        if recordSet.AbsolutePosition < recordSet.RecordCount then
+            response.Write ","
+        end if   
+        recordSet.MoveNext
+    loop  
+    
+    response.Write "]"
+    response.Write "}"
+    recordSet.Close
+end function
 
 function colocarDados
-    stop
+    
     usuid = CInt(request("usuid")) 
 
     if usuid <> "" then        
@@ -27,13 +56,15 @@ function colocarDados
             cep = rs("cep")
             estadoid = rs("estadoid")
         end if
-end if
-set records = cn.execute("select * from tarefa where geradorID ="& usuid) 
-if records.eof then
-    geradorID = 0
-else
-    geradorID = records("geradorID")
-end if
+    end if
+    set records = cn.execute("select * from tarefa where geradorID ="& usuid) 
+
+    if records.eof then
+        geradorID = 0
+    else
+        geradorID = records("geradorID")
+    end if
+
     retorno = "true"
     Response.ContentType = "application/json"
     response.Write  "{"   

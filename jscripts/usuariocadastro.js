@@ -3,9 +3,9 @@ window.addEventListener('load', function () {
         cadastrar.style.display = 'none';
         alterar.style.display = 'inline';
         deletar.style.display = 'inline';
+        prencherdados();
     }
-    prencherdados();
-    buscaEstados(idElemento)
+    buscaEstados(document.getElementById("selEstados"));
 
 });
 
@@ -17,7 +17,7 @@ function limparCampos() {
     document.getElementById("endereco").value = "";
     document.getElementById("cidade").value = "";
     document.getElementById("cep").value = "";
-    document.getElementById("estadoid").value = "";
+    document.getElementById("selEstados").value = "";
 }
 
 function mascara(t, mask) {
@@ -46,7 +46,7 @@ function prencherdados() {
         async: false,
         data: {
             fnTarget: "colocarDados",
-            usuid: usuid
+            usuid: 0
         },
         success: function (data) {
             debugger;
@@ -57,7 +57,7 @@ function prencherdados() {
                 document.getElementById("endereco").value = "sss";
                 document.getElementById("cidade").value = "sss";
                 document.getElementById("cep").value = "sss";
-                document.getElementById("estadoid").value = "sss";
+                document.getElementById("selEstados").value = "sss";
                 document.getElementById("geradorID").value = "sss";
             }
        },
@@ -69,7 +69,7 @@ function prencherdados() {
 
 function cadastrarUsuario(event) {
     event.preventDefault();
-
+    debugger
     if (validarDados()) {
 
         $.ajax({
@@ -84,7 +84,7 @@ function cadastrarUsuario(event) {
                 endereco: document.getElementById("endereco").value,
                 cidade: document.getElementById("cidade").value,
                 cep: document.getElementById("cep").value,
-                estadoid: document.getElementById("estadoid").value,
+                estadoid: document.getElementById("selEstados").value,
                 geradorID: document.getElementById("geradorID").value
             },
             success: function (retorno) {
@@ -112,15 +112,29 @@ function buscaEstados(idElemento) {
     if (!idElemento) {
         return false;
     }
-    debugger
     return $.ajax({
-        url: "./AspPages/estado.asp",
+        url: "ajax/usuariocadastroAjax.asp",
         type: 'GET',
         contentType: 'application/json',
+        data: {
+            fnTarget: "buscarEstados",
+        },
         success: function (data) {
-            preencheOptions(idElemento, JSON.parse(data));
+            preencheOptions(idElemento, data);
+        },
+        error: function (obj, err) {
+            mostraAlerta("Servidor com erro, por favor usar mais tarde. \n" + obj.responseText)
         }
     });
+}
+function preencheOptions(idElemento, data) {
+    var estados = data['Estados'];
+    for (var i = 0; i < estados.length; i++) {
+        var opt = document.createElement('option');
+        opt.innerHTML = estados[i]['nome'];
+        opt.value = estados[i]['estadoid'];
+        idElemento.appendChild(opt);
+    }
 }
 
 function validarDados() {
@@ -148,7 +162,7 @@ function validarDados() {
         mostraAlerta("Preencha o campo cep!");
         return false;
     }
-    else if (estadoid.value == "") {
+    else if (selEstados.value == "") {
         mostraAlerta("Preencha o campo estado!");
         return false;
     }
@@ -173,7 +187,7 @@ function alterarUsuario(event) {
                 endereco: document.getElementById("endereco").value,
                 cidade: document.getElementById("cidade").value,
                 cep: document.getElementById("cep").value,
-                estadoid: document.getElementById("estadoid").value,
+                estadoid: document.getElementById("selEstados").value,
                 geradorID: document.getElementById("geradorID").value
             },
             success: function (retorno) {
