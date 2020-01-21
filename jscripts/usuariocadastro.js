@@ -1,5 +1,5 @@
 window.addEventListener('load', function () {
-    buscaEstados(document.getElementById("estadoid"));
+    
     const queryString = window.location.search;
     console.log(queryString);
     const urlParams = new URLSearchParams(queryString);
@@ -59,7 +59,8 @@ function prencherdados(usuid) {
                 document.getElementById("cep").value = data.cep;
                 document.getElementById("estadoid").options.selectedIndex = data.estadoid;
                 document.getElementById("geradorID").value = data.geradorID;
-
+                var estadoid = data.estadoid;
+                buscaEstados(document.getElementById("estadoid"), estadoid);
             }
        },
         error: function (obj, err) {
@@ -109,7 +110,7 @@ function cadastrarUsuario(event) {
     }
 }
 
-function buscaEstados(idElemento) {
+function buscaEstados(idElemento, estadoid) {
     if (!idElemento) {
         return false;
     }
@@ -119,27 +120,32 @@ function buscaEstados(idElemento) {
         contentType: 'application/json',
         data: {
             fnTarget: "buscarEstados",
+            
         },
         success: function (data) {
-            preencheOptions(idElemento, data);
+            preencheOptions(idElemento, data, estadoid);
         },
         error: function (obj, err) {
             mostraAlerta("Servidor com erro, por favor usar mais tarde. \n" + obj.responseText)
         }
     });
 }
-function preencheOptions(idElemento, data) {
+function preencheOptions(idElemento, data, estadoid) {
+    debugger;
     var estados = data['Estados'];
     for (var i = 0; i < estados.length; i++) {
         var opt = document.createElement('option');
+        if (i == estadoid) {
+            document.getElementById(i).selected = "true"
+        }
         opt.innerHTML = estados[i]['nome'];
         opt.value = estados[i]['estadoid'];
+        opt.id = estados[i]['estadoid'];
         idElemento.appendChild(opt);
     }
 }
 
 function validarDados() {
-    debugger;
     if (usuario.value == "") {
         mostraAlerta("Preencha o campo usuário!");
         return false;
