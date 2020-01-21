@@ -1,6 +1,7 @@
 <!-- #include file = "../configs/config.asp" -->
 <!-- #include file = "../class/validacao.asp" -->
 <% 
+    
 Response.CodePage = 65001
 Response.CharSet = "UTF-8"
 Response.ContentType = "application/json"
@@ -58,23 +59,20 @@ function colocarDados
         end if
     end if
     set records = cn.execute("select * from tarefa where geradorID ="& usuid) 
-
     if records.eof then
         geradorID = 0
     else
         geradorID = records("geradorID")
     end if
-
-    retorno = "true"
-    Response.ContentType = "application/json"
     response.Write  "{"   
-    response.Write      """usuario"": " & usuario
-    response.Write      ",""senha"": " & senha
-    response.Write      ",""nome"": " & nome
-    response.Write      ",""endereco"": " & endereco
-    response.Write      ",""cidade"": " & cidade
-    response.Write      ",""cep"": " & cep
-    response.Write      ",""estadoid"": " & estadoid
+    response.Write      """usuario"": """ & usuario & """"
+    response.Write      ",""senha"": """ & senha & """"
+    response.Write      ",""nome"": """ & nome & """"
+    response.Write      ",""endereco"": """ & endereco & """"
+    response.Write      ",""cidade"": """ & cidade & """"
+    response.Write      ",""cep"": """ & cep & """"
+    response.Write      ",""estadoid"": " & estadoid & ""
+    response.Write      ",""geradorID"": " & geradorID & ""
     response.Write  "}"
 
 end function
@@ -98,7 +96,6 @@ function cadastrarUsuario()
         end if
     end if
 
-    Response.ContentType = "application/json"
 
     response.Write  "{"
     response.Write      """sucesso"":""true"""
@@ -108,7 +105,6 @@ function cadastrarUsuario()
 end function
 
 function alterarUsuario()
-    
     usuid = CInt(request("usuid"))
     usuario = cstr("" & Replace(request.form("usuario"),"'","''"))
     senha = cstr("" & Replace(request.form("senha"),"'","''"))
@@ -121,14 +117,18 @@ function alterarUsuario()
     if validaNome(usuario,senha,nome,endereco,cidade,cep,estadoid) then
         cn.execute("update usuario SET usuario = '"& usuario &"', senha = '"& senha &"', nome = '"& nome &"', endereco = '"& endereco &"', cidade = '"& cidade &"', cep = '"& cep &"', estadoid = '"& estadoid &"' where usuid ="& usuid )
     end if
-    response.Write "true"
+    response.Write  "{"
+    response.Write      """sucesso"":""true"""
+    response.Write  "}"
 end function
 
 function deletarUsuario()
-
+    stop
     usuid = CInt(request("usuid"))
     cn.execute("delete from usuario where usuid ="& usuid )  
-    response.Write "true"
+    response.Write  "{"
+    response.Write      """sucesso"":""true"""
+    response.Write  "}"
 
 end function
 %>

@@ -1,13 +1,16 @@
-$.ajax({
+window.addEventListener('load', function () {
+    debugger;
+    $.ajax({
         type: "POST",
         url: "ajax/listausuarioAjax.asp",
         async: false,
     data: {
-            fnTarget: "validar"
+            fnTarget: "validar",
         },
+    });
 });
 
-function myFunction(event) {
+function mudarpagina(event) {
 
     if (event.keyCode === 13) {
         event.preventDefault();

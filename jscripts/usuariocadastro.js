@@ -1,11 +1,15 @@
 window.addEventListener('load', function () {
-    if (usuid.value > 0) {
+    buscaEstados(document.getElementById("estadoid"));
+    const queryString = window.location.search;
+    console.log(queryString);
+    const urlParams = new URLSearchParams(queryString);
+    var usuid = urlParams.get("usuid");
+    if (usuid > 0) {
         cadastrar.style.display = 'none';
         alterar.style.display = 'inline';
         deletar.style.display = 'inline';
-        prencherdados();
+        prencherdados(usuid);
     }
-    buscaEstados(document.getElementById("selEstados"));
 
 });
 
@@ -17,7 +21,7 @@ function limparCampos() {
     document.getElementById("endereco").value = "";
     document.getElementById("cidade").value = "";
     document.getElementById("cep").value = "";
-    document.getElementById("selEstados").value = "";
+    document.getElementById("estadoid").value = "";
 }
 
 function mascara(t, mask) {
@@ -29,36 +33,33 @@ function mascara(t, mask) {
     }
 }
 
-function prencherdados() {
+function prencherdados(usuid) {
     /*
      * pegar o id do usuario
      * fazer uma requisiçao
      * pegar os dados de retorno
      * prencher os formulario
      */
-    const queryString = window.location.search;
-    console.log(queryString);
-    const urlParams = new URLSearchParams(queryString);
-    var usuid = urlParams.get("usuid");
    return $.ajax({
         type: "POST",
         url: "ajax/usuariocadastroAjax.asp",
         async: false,
         data: {
             fnTarget: "colocarDados",
-            usuid: 0
+            usuid: usuid
         },
         success: function (data) {
             debugger;
-            if (data.retorno) {
-                document.getElementById("usuario").value = "sss";
-                document.getElementById("senha").value = "sss";
-                document.getElementById("nome").value = "sss";
-                document.getElementById("endereco").value = "sss";
-                document.getElementById("cidade").value = "sss";
-                document.getElementById("cep").value = "sss";
-                document.getElementById("selEstados").value = "sss";
-                document.getElementById("geradorID").value = "sss";
+            if (data) {
+                document.getElementById("usuario").value = data.usuario;
+                document.getElementById("senha").value = data.senha;
+                document.getElementById("nome").value = data.nome;
+                document.getElementById("endereco").value = data.endereco;
+                document.getElementById("cidade").value = data.cidade;
+                document.getElementById("cep").value = data.cep;
+                document.getElementById("estadoid").options.selectedIndex = data.estadoid;
+                document.getElementById("geradorID").value = data.geradorID;
+
             }
        },
         error: function (obj, err) {
@@ -84,7 +85,7 @@ function cadastrarUsuario(event) {
                 endereco: document.getElementById("endereco").value,
                 cidade: document.getElementById("cidade").value,
                 cep: document.getElementById("cep").value,
-                estadoid: document.getElementById("selEstados").value,
+                estadoid: document.getElementById("estadoid").value,
                 geradorID: document.getElementById("geradorID").value
             },
             success: function (retorno) {
@@ -138,6 +139,7 @@ function preencheOptions(idElemento, data) {
 }
 
 function validarDados() {
+    debugger;
     if (usuario.value == "") {
         mostraAlerta("Preencha o campo usuário!");
         return false;
@@ -162,7 +164,7 @@ function validarDados() {
         mostraAlerta("Preencha o campo cep!");
         return false;
     }
-    else if (selEstados.value == "") {
+    else if (estadoid.value == "") {
         mostraAlerta("Preencha o campo estado!");
         return false;
     }
@@ -172,28 +174,37 @@ function validarDados() {
 
 function alterarUsuario(event) {
     event.preventDefault();
-
-    if (validarDados()) {
+    debugger;
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    var usuid = urlParams.get("usuid");
+    var ddd = validarDados();
+    var data = {
+        fnTarget: "alterarUsuario",
+        usuid: usuid,
+        usuario: document.getElementById("usuario").value,
+        senha: document.getElementById("senha").value,
+        nome: document.getElementById("nome").value,
+        endereco: document.getElementById("endereco").value,
+        cidade: document.getElementById("cidade").value,
+        cep: document.getElementById("cep").value,
+        estadoid: document.getElementById("estadoid").value,
+        geradorID: document.getElementById("geradorID").value
+    };
+    if (ddd) {
         $.ajax({
             type: "POST",
             url: "ajax/usuariocadastroAjax.asp",
             async: false,
-            data: {
-                fnTarget: "alterarUsuario",
-                usuid: document.getElementById("usuid").value,
-                usuario: document.getElementById("usuario").value,
-                senha: document.getElementById("senha").value,
-                nome: document.getElementById("nome").value,
-                endereco: document.getElementById("endereco").value,
-                cidade: document.getElementById("cidade").value,
-                cep: document.getElementById("cep").value,
-                estadoid: document.getElementById("selEstados").value,
-                geradorID: document.getElementById("geradorID").value
-            },
+            data: data,
             success: function (retorno) {
-                if (retorno == 'true') {
+                debugger
+                if (retorno.sucesso == 'true')  {
                     mostraAlerta("Usuário alterado com sucesso")
                 }
+            },
+            error: function (obj, err) {
+                mostraAlerta("Servidor com erro, por favor usar mais tarde. " + err)
             }
         });
     }
@@ -201,8 +212,11 @@ function alterarUsuario(event) {
 
 function deletarUsuario(event) {
     event.preventDefault();
-
-    if (usuid.value == geradorID.value) {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    var usuid = urlParams.get("usuid");
+    debugger;
+    if (usuid == geradorID.value) {
         mostraAlerta("Usuários geradores de tarefas não podem ser deletados");
         return false;
     }
@@ -213,13 +227,17 @@ function deletarUsuario(event) {
         async: false,
         data: {
             fnTarget: "deletarUsuario",
-            usuid: document.getElementById("usuid").value
+            usuid: usuid
         },
         success: function (retorno) {
-            if (retorno == 'true') {
+            debugger;
+            if (retorno.sucesso == 'true') {
                 mostraAlerta("Usuário deletado com sucesso")
                 window.location.href = "listausuario.asp";
             }
+        },
+        error: function (obj, err) {
+            mostraAlerta("Servidor com erro, por favor usar mais tarde. " + err)
         }
     });
 }
