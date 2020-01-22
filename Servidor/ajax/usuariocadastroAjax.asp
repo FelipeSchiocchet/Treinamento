@@ -9,7 +9,7 @@ Response.ContentType = "application/json"
 if (Request("fnTarget") <> "") then
     Execute(Request("fnTarget") & "()")
 end if
-
+    
 dim usuario, senha, nome, endereco, cidade, cep, estadoid, geradorID
 dim recordSet
 dim rs
@@ -123,7 +123,7 @@ function alterarUsuario()
 end function
 
 function deletarUsuario()
-    stop
+    
     usuid = CInt(request("usuid"))
     cn.execute("delete from usuario where usuid ="& usuid )  
     response.Write  "{"

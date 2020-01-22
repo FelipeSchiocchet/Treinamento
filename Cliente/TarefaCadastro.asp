@@ -1,6 +1,6 @@
 <% option explicit %>
-<!-- #include file = "configs/config.asp" -->
-<!-- #include file = "class/validartarefa.asp" -->
+<!-- #include file = "../configs/config.asp" -->
+<!-- #include file = "../class/validartarefa.asp" -->
 <!DOCTYPE html>
 <html class="font">
 <head>
@@ -9,7 +9,7 @@
     </head>
     <body>
         <h1 class="u">Tarefa</h1>
-        <p><a href="http://localhost/treinamento/lista.asp">Voltar para a listagem de tarefas</a></p>
+        <p><a href="http://localhost/treinamento/Cliente/lista.asp">Voltar para a listagem de tarefas</a></p>
            <%
 
               dim tarTitulo, geradorID, tarDescricao, tarStatus, tarData, tarData2

@@ -3,11 +3,12 @@
 
 Response.CodePage = 65001
 Response.CharSet = "UTF-8"
+Response.ContentType = "application/json"
 
 if (Request("fnTarget") <> "") then
 Execute(Request("fnTarget") & "()")
 end if
-
+   
 dim intLimit
 dim numeroAtual
 dim Npagina
@@ -16,7 +17,7 @@ dim btnAcao
 dim inputAcao
 dim Ndepaginas, Ndepaginas2
      
-function validar()
+function BuscarUsuariosPaginados()
     stop      
     inputAcao = request.form("input")
     if inputAcao = "" then 
@@ -38,7 +39,7 @@ function validar()
     Npagina = CInt(Npagina)
     inputAcao = CInt(inputAcao)
                      
-    intLimit = "30"
+    intLimit = 30
     set recordSet = Server.CreateObject("ADODB.recordset")
     call recordSet.Open("SELECT usuid FROM usuario ORDER BY usuid asc;",cn,1,1)
     Ndepaginas =  Round(recordSet.recordcount / 30 + 1)
@@ -85,22 +86,36 @@ function validar()
     recordSet.pageSize = intLimit
             
     numeroAtual = intLimit * (Npagina - 1) + recordSet.recordcount
-           
-              
+    
+    response.Write "{"
+    response.Write """TotalRegistros"":""" & intTotal & """"
+    response.Write ",""RegistrosPorPagina"":""" & intLimit & """"
+    response.Write ",""PaginaAtual"":""" & Npagina & """"
+    response.Write ",""TotalPaginas"":""" & Ndepaginas & """"
+    response.Write ",""Dados"":["
+    
     Do While (not recordSet.EOF)
-        response.Write( _
-        "<tr>" & _
-        "<td>" & recordSet("nome") & "</td>" &_
-        "<td>" & recordSet("usuario") & "</td>"&_
-        "<td>" & recordSet("endereco") & "</td>"&_
-        "<td>" & recordSet("cidade") & "</td>"&_
-        "<td>" & recordSet("cep") & "</td>"&_
-        "<td class='img'><a href='usuariocadastro.asp?usuid="& recordSet("usuid") &"' class='editar'>"&_
-        "<img src='imagens/editar.png' alt='editar' >"& _
-        "</a></td>" &_
-        "</tr>")
+        response.Write  "{"
+            response.Write      """Nome"": """ & recordSet("nome") & """"
+            response.Write      ",""Usuario"": """ & recordSet("usuario") & """"
+            response.Write      ",""Endereco"": """ & recordSet("endereco") & """"
+            response.Write      ",""Cidade"": """ & recordSet("cidade") & """"
+            response.Write      ",""Cep"": """ & recordSet("cep") & """"
+            response.Write      ",""usuid"":""" & recordSet("usuid") &""""
+        response.Write  "}"
+        if recordSet.AbsolutePosition < recordSet.RecordCount then
+            response.Write ","
+        end if   
+    'response.Write( _
+        '"<td class='img'><a href='usuariocadastro.asp?usuid="& recordSet("usuid") &"' class='editar'>"&_
+        '"<img src='imagens/editar.png' alt='editar' >"& _
+        '"</a></td>" &_
+        '"</tr>")
         recordSet.MoveNext
     Loop
+    response.Write "]"
+    response.Write "}" 
+
     recordSet.close()
     if numeroAtual = intTotal then
         voltarDisableddenovo = "disabled"

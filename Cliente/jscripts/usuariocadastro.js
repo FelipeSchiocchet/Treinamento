@@ -1,27 +1,46 @@
 window.addEventListener('load', function () {
-    
     const queryString = window.location.search;
     console.log(queryString);
     const urlParams = new URLSearchParams(queryString);
     var usuid = urlParams.get("usuid");
+    AdicionarEventos(usuid);
     if (usuid > 0) {
         cadastrar.style.display = 'none';
         alterar.style.display = 'inline';
         deletar.style.display = 'inline';
         prencherdados(usuid);
+    } else {
+        var estadoid = 1;
+        buscaEstados(document.getElementById("estadoid"), estadoid);
     }
-
 });
 
-function limparCampos() {
-    //debugger
-    document.getElementById("usuario").value = "";
-    document.getElementById("senha").value = "";
-    document.getElementById("nome").value = "";
-    document.getElementById("endereco").value = "";
-    document.getElementById("cidade").value = "";
-    document.getElementById("cep").value = "";
-    document.getElementById("estadoid").value = "";
+function AdicionarEventos(usuid) {
+    $btnCadastrar = document.getElementById("cadastrar");
+    $btnAlterar = document.getElementById("alterar");
+    $btnDeletar = document.getElementById("deletar");
+    $btnNovo = document.getElementById("novo");
+
+    $btnCadastrar.addEventListener("click", function (e) {
+        cadastrarUsuario(e);
+    });
+
+    $btnAlterar.addEventListener("click", function (e) {
+        alterarUsuario(e, usuid);
+    });
+
+    $btnDeletar.addEventListener("click", function (e) {
+        deletarUsuario(e);
+    });
+
+    $btnNovo.addEventListener("click", function (e) {
+        limparCampos(e);
+    });
+
+}
+
+function limparCampos(e) {
+    location.href = "usuariocadastro.asp"
 }
 
 function mascara(t, mask) {
@@ -42,14 +61,13 @@ function prencherdados(usuid) {
      */
    return $.ajax({
         type: "POST",
-        url: "ajax/usuariocadastroAjax.asp",
+        url: "../Servidor/ajax/usuariocadastroAjax.asp",
         async: false,
         data: {
             fnTarget: "colocarDados",
             usuid: usuid
         },
         success: function (data) {
-            debugger;
             if (data) {
                 document.getElementById("usuario").value = data.usuario;
                 document.getElementById("senha").value = data.senha;
@@ -76,7 +94,7 @@ function cadastrarUsuario(event) {
 
         $.ajax({
             type: "POST",
-            url: "ajax/usuariocadastroAjax.asp",
+            url: "../Servidor/ajax/usuariocadastroAjax.asp",
             async: false,
             data: {
                 fnTarget: "cadastrarUsuario",
@@ -90,19 +108,10 @@ function cadastrarUsuario(event) {
                 geradorID: document.getElementById("geradorID").value
             },
             success: function (retorno) {
-
                 if (retorno.sucesso == 'true') {
                     mostraAlerta("Usuário cadastrado com sucesso");
 
-                    var cadastrar = document.getElementById('cadastrar');
-                    var alterar = document.getElementById('alterar');
-                    var deletar = document.getElementById('deletar');
-
-                    document.getElementById("usuid").value = retorno.UsuID;
-
-                    cadastrar.style.display = 'none';
-                    alterar.style.display = 'inline';
-                    deletar.style.display = 'inline';
+                    location.href = "usuariocadastro.asp?usuid=" + retorno.UsuID;
                 }
             }
         });
@@ -115,7 +124,7 @@ function buscaEstados(idElemento, estadoid) {
         return false;
     }
     return $.ajax({
-        url: "ajax/usuariocadastroAjax.asp",
+        url: "../Servidor/ajax/usuariocadastroAjax.asp",
         type: 'GET',
         contentType: 'application/json',
         data: {
@@ -131,7 +140,6 @@ function buscaEstados(idElemento, estadoid) {
     });
 }
 function preencheOptions(idElemento, data, estadoid) {
-    debugger;
     var estados = data['Estados'];
     for (var i = 0; i < estados.length; i++) {
         var opt = document.createElement('option');
@@ -180,7 +188,7 @@ function validarDados() {
 
 function alterarUsuario(event) {
     event.preventDefault();
-    debugger;
+
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     var usuid = urlParams.get("usuid");
@@ -200,7 +208,7 @@ function alterarUsuario(event) {
     if (ddd) {
         $.ajax({
             type: "POST",
-            url: "ajax/usuariocadastroAjax.asp",
+            url: "../Servidor/ajax/usuariocadastroAjax.asp",
             async: false,
             data: data,
             success: function (retorno) {
@@ -221,7 +229,6 @@ function deletarUsuario(event) {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     var usuid = urlParams.get("usuid");
-    debugger;
     if (usuid == geradorID.value) {
         mostraAlerta("Usuários geradores de tarefas não podem ser deletados");
         return false;
@@ -229,15 +236,14 @@ function deletarUsuario(event) {
 
     $.ajax({
         type: "POST",
-        url: "ajax/usuariocadastroAjax.asp",
+        url: "../Servidor/ajax/usuariocadastroAjax.asp",
         async: false,
         data: {
             fnTarget: "deletarUsuario",
             usuid: usuid
         },
         success: function (retorno) {
-            debugger;
-            if (retorno.sucesso == 'true') {
+          if (retorno.sucesso == 'true') {
                 mostraAlerta("Usuário deletado com sucesso")
                 window.location.href = "listausuario.asp";
             }

@@ -1,4 +1,5 @@
 window.addEventListener('load', function () {
+    debugger;
     document.getElementById("botaologin").addEventListener("click", function () {
         event.preventDefault();
         validarLogon();
@@ -17,8 +18,8 @@ function validarLogon() {
     }
 
     $.ajax({
+        url: "../Servidor/ajax/logonAjax.asp",
         type: "POST",
-        url: "ajax/logonAjax.asp",
         async: false,
         data: {
             fnTarget: "validarLogon",
@@ -35,6 +36,7 @@ function validarLogon() {
             }
         },
         error: function (obj, err) {
+
             mostraAlerta("Servidor com erro, por favor usar mais tarde. " + err)
         }
     });

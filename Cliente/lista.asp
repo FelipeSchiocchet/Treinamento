@@ -1,4 +1,4 @@
-<!-- #include file = "configs/config.asp" -->
+<!-- #include file = "../configs/config.asp" -->
 <%
     'implementar sessao e validação
     if Session("usuario") <> "logado" then
@@ -13,7 +13,7 @@
     </head>
     <body>
         <h1 class="u">Tarefas</h1>
-        <p><a href="http://localhost/treinamento/TarefaCadastro.asp">Nova tarefa</a></p>
+        <p><a href="http://localhost/treinamento/Cliente/TarefaCadastro.asp">Nova tarefa</a></p>
         <table>
             <tr>
                 <th>N°</th>
