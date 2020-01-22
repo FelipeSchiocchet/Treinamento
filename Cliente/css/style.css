@@ -113,12 +113,6 @@
     width: 100px;
 }
 
-.botaoresete {
-    font-size: 16px;
-    width: 100px;
-    font-weight: bold;
-}
-
 #alterar {
     display: none;
 }
@@ -182,6 +176,9 @@ tr:nth-child(even) {
     width: 12px;
     height: 12px;
     border: 0
+}
+thead, tfoot {
+    background-color: #aaa;
 }
 .pagination ul {
     list-style-type: none;

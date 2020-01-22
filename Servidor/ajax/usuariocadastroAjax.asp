@@ -1,7 +1,6 @@
 <!-- #include file = "../configs/config.asp" -->
 <!-- #include file = "../class/validacao.asp" -->
-<% 
-    
+<%  
 Response.CodePage = 65001
 Response.CharSet = "UTF-8"
 Response.ContentType = "application/json"
@@ -17,9 +16,8 @@ dim records
 dim usuid
 dim usuNome
         
-
 function buscarEstados
-   sqlEst = "SELECT * FROM [treinamento].[dbo].[estado]"
+    sqlEst = "SELECT * FROM [treinamento].[dbo].[estado]"
     Set recordSet=Server.CreateObject("ADODB.recordset")
     recordSet.Open sqlEst, cn,&H0001
 
@@ -42,8 +40,7 @@ function buscarEstados
     recordSet.Close
 end function
 
-function colocarDados
-    
+function colocarDados    
     usuid = CInt(request("usuid")) 
 
     if usuid <> "" then        
@@ -74,12 +71,9 @@ function colocarDados
     response.Write      ",""estadoid"": " & estadoid & ""
     response.Write      ",""geradorID"": " & geradorID & ""
     response.Write  "}"
-
 end function
 
-
 function cadastrarUsuario()
-
     usuario = cstr("" & Replace(request.form("usuario"),"'","''"))
     senha = cstr("" & Replace(request.form("senha"),"'","''"))
     nome = cstr("" & Replace(request.form("nome"),"'","''"))
@@ -95,7 +89,6 @@ function cadastrarUsuario()
             usuid = cint(rs("UsuID"))
         end if
     end if
-
 
     response.Write  "{"
     response.Write      """sucesso"":""true"""

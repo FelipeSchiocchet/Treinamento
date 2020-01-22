@@ -17,7 +17,6 @@ function BuscarUsuarios(fnTarget, RegistrosPorPagina, PaginaPesquisa) {
         type: 'POST',
         data: dadosPesquisa,
         success: function (data) {
-            debugger;
             PreencheTabela(data);
         },
         error: function (xhr, status, error) {

@@ -53,12 +53,6 @@ function mascara(t, mask) {
 }
 
 function prencherdados(usuid) {
-    /*
-     * pegar o id do usuario
-     * fazer uma requisiçao
-     * pegar os dados de retorno
-     * prencher os formulario
-     */
    return $.ajax({
         type: "POST",
         url: "../Servidor/ajax/usuariocadastroAjax.asp",
@@ -89,9 +83,7 @@ function prencherdados(usuid) {
 
 function cadastrarUsuario(event) {
     event.preventDefault();
-    debugger
     if (validarDados()) {
-
         $.ajax({
             type: "POST",
             url: "../Servidor/ajax/usuariocadastroAjax.asp",
@@ -110,7 +102,6 @@ function cadastrarUsuario(event) {
             success: function (retorno) {
                 if (retorno.sucesso == 'true') {
                     mostraAlerta("Usuário cadastrado com sucesso");
-
                     location.href = "usuariocadastro.asp?usuid=" + retorno.UsuID;
                 }
             }
@@ -128,8 +119,7 @@ function buscaEstados(idElemento, estadoid) {
         type: 'GET',
         contentType: 'application/json',
         data: {
-            fnTarget: "buscarEstados",
-            
+            fnTarget: "buscarEstados" 
         },
         success: function (data) {
             preencheOptions(idElemento, data, estadoid);
@@ -139,6 +129,7 @@ function buscaEstados(idElemento, estadoid) {
         }
     });
 }
+
 function preencheOptions(idElemento, data, estadoid) {
     var estados = data['Estados'];
     for (var i = 0; i < estados.length; i++) {
@@ -182,13 +173,11 @@ function validarDados() {
         mostraAlerta("Preencha o campo estado!");
         return false;
     }
-
     return true;
 }
 
 function alterarUsuario(event) {
     event.preventDefault();
-
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     var usuid = urlParams.get("usuid");
@@ -212,7 +201,6 @@ function alterarUsuario(event) {
             async: false,
             data: data,
             success: function (retorno) {
-                debugger
                 if (retorno.sucesso == 'true')  {
                     mostraAlerta("Usuário alterado com sucesso")
                 }
@@ -233,7 +221,6 @@ function deletarUsuario(event) {
         mostraAlerta("Usuários geradores de tarefas não podem ser deletados");
         return false;
     }
-
     $.ajax({
         type: "POST",
         url: "../Servidor/ajax/usuariocadastroAjax.asp",

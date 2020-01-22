@@ -106,11 +106,6 @@ function BuscarUsuariosPaginados()
         if recordSet.AbsolutePosition < recordSet.RecordCount then
             response.Write ","
         end if   
-    'response.Write( _
-        '"<td class='img'><a href='usuariocadastro.asp?usuid="& recordSet("usuid") &"' class='editar'>"&_
-        '"<img src='imagens/editar.png' alt='editar' >"& _
-        '"</a></td>" &_
-        '"</tr>")
         recordSet.MoveNext
     Loop
     response.Write "]"
