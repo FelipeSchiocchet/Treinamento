@@ -39,10 +39,6 @@ function AdicionarEventos(usuid) {
 
 }
 
-function limparCampos(e) {
-    location.href = "usuariocadastro.asp"
-}
-
 function mascara(t, mask) {
     var i = t.value.length;
     var saida = mask.substring(1, 0);
@@ -101,7 +97,7 @@ function cadastrarUsuario(event) {
             },
             success: function (retorno) {
                 if (retorno.sucesso == 'true') {
-                    mostraAlerta("Usuário cadastrado com sucesso");
+                    mostraAlerta("Usuï¿½rio cadastrado com sucesso");
                     location.href = "usuariocadastro.asp?usuid=" + retorno.UsuID;
                 }
             }
@@ -146,7 +142,7 @@ function preencheOptions(idElemento, data, estadoid) {
 
 function validarDados() {
     if (usuario.value == "") {
-        mostraAlerta("Preencha o campo usuário!");
+        mostraAlerta("Preencha o campo usuï¿½rio!");
         return false;
     }
     else if (senha.value == "") {
@@ -158,7 +154,7 @@ function validarDados() {
         return false;
     }
     else if (endereco.value == "") {
-        mostraAlerta("Preencha o campo endereço!");
+        mostraAlerta("Preencha o campo endereï¿½o!");
         return false;
     }
     else if (cidade.value == "") {
@@ -202,7 +198,7 @@ function alterarUsuario(event) {
             data: data,
             success: function (retorno) {
                 if (retorno.sucesso == 'true')  {
-                    mostraAlerta("Usuário alterado com sucesso")
+                    mostraAlerta("Usuï¿½rio alterado com sucesso")
                 }
             },
             error: function (obj, err) {
@@ -218,7 +214,7 @@ function deletarUsuario(event) {
     const urlParams = new URLSearchParams(queryString);
     var usuid = urlParams.get("usuid");
     if (usuid == geradorID.value) {
-        mostraAlerta("Usuários geradores de tarefas não podem ser deletados");
+        mostraAlerta("Usuï¿½rios geradores de tarefas nï¿½o podem ser deletados");
         return false;
     }
     $.ajax({
@@ -231,7 +227,7 @@ function deletarUsuario(event) {
         },
         success: function (retorno) {
           if (retorno.sucesso == 'true') {
-                mostraAlerta("Usuário deletado com sucesso")
+                mostraAlerta("Usuï¿½rio deletado com sucesso")
                 window.location.href = "listausuario.asp";
             }
         },
