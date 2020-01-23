@@ -4,14 +4,12 @@ window.addEventListener('load', function () {
 
 function BuscarUsuarios(fnTarget, RegistrosPorPagina, PaginaPesquisa) {
 
-    /*
-    * Lógica para preenchimento dos dados iniciais da tabela de usuários    
-    */
     dadosPesquisa = {
         "fnTarget": fnTarget,
         "RegistrosPorPagina": RegistrosPorPagina,
         "PaginaPesquisa": PaginaPesquisa,
     }
+    // TODO - fazer
     return $.ajax({
         url: "../Servidor/ajax/listausuarioAjax.asp",
         type: 'POST',
@@ -20,7 +18,7 @@ function BuscarUsuarios(fnTarget, RegistrosPorPagina, PaginaPesquisa) {
             PreencheTabela(data);
         },
         error: function (xhr, status, error) {
-           alert("Erro: " + xhr + status + error);
+            alert("Erro: " + xhr + status + error);
         }
     });
 }
@@ -92,16 +90,10 @@ function TabelaCriarRodape(tabela, dados) {
 
     var ul = document.createElement("ul");//<ul></ul>;
 
-    var linkPrimeiraPagina = document.createElement("a");//<a></a>
-    linkPrimeiraPagina.href = "usuarioTabela.asp?pagina=1&registrosPorPagina=20"; // href="usuarioTabela.asp?pagina=1&registrosPorPagina=20">
-    var liPrimeiraPagina = document.createElement("li");//<li></li>;
-    liPrimeiraPagina.innerText = "<<"; // <<
-    linkPrimeiraPagina.appendChild(liPrimeiraPagina);//<a href="#"><li> << </li></a>
-
     var linkVoltaUmaPagina = document.createElement("a");//<a></a>
-    linkVoltaUmaPagina.href = "usuarioTabela.asp?pagina=1&registrosPorPagina=20"; // href="usuarioTabela.asp?pagina=1&registrosPorPagina=20">
+    linkVoltaUmaPagina.href = "listausuario.asp"; // href="listausuario.asp">
     var liVoltaUmaPagina = document.createElement("li");//<li></li>;
-    liVoltaUmaPagina.innerText = "<"; // <
+    liVoltaUmaPagina.innerText = "<<"; // <
     linkVoltaUmaPagina.appendChild(liVoltaUmaPagina);//<a href="#"><li> < </li></a>
 
     var inputPagina = document.createElement("input");// <input/>
@@ -110,16 +102,10 @@ function TabelaCriarRodape(tabela, dados) {
     inputPagina.name = "txtPagina";//name="txtPagina" 
 
     var linkAvancaUmaPagina = document.createElement("a");//<a></a>
-    linkAvancaUmaPagina.href = "usuarioTabela.asp?pagina=1&registrosPorPagina=20"; // href="usuarioTabela.asp?pagina=1&registrosPorPagina=20">
+    linkAvancaUmaPagina.href = "listausuario.asp"; // href="listausuario.asp">
     var liAvancaUmaPagina = document.createElement("li");//<li></li>;
-    liAvancaUmaPagina.innerText = ">"; // >
+    liAvancaUmaPagina.innerText = ">>"; // >
     linkAvancaUmaPagina.appendChild(liAvancaUmaPagina);//<a href="#"><li> < </li></a>
-
-    var linkUltimaPagina = document.createElement("a");//<a></a>
-    linkUltimaPagina.href = "usuarioTabela.asp?pagina=1&registrosPorPagina=20"; // href="usuarioTabela.asp?pagina=1&registrosPorPagina=20">
-    var liUltimaPagina = document.createElement("li");//<li></li>;
-    liUltimaPagina.innerText = ">>"; // >>
-    linkUltimaPagina.appendChild(liUltimaPagina);//<a href="#"><li> >> </li></a>
 
 
     var liInfo = document.createElement("li");//<li></li>;
@@ -132,16 +118,13 @@ function TabelaCriarRodape(tabela, dados) {
     inputQtdRegistros.name = "txtQtdRegistros";//name="txtQtdRegistros" 
     inputQtdRegistros.value = dados.RegistrosPorPagina;
     lblQtdRegistros = document.createElement("label");
-    lblQtdRegistros.innerText = "Quantidade de Registros por Página: "
+    lblQtdRegistros.innerText = "Quantidade de Registros por Pï¿½gina: "
     liQtdRegistros.appendChild(lblQtdRegistros);
     liQtdRegistros.appendChild(inputQtdRegistros);
 
-
-    ul.appendChild(linkPrimeiraPagina);
     ul.appendChild(linkVoltaUmaPagina);
     ul.appendChild(inputPagina);
     ul.appendChild(linkAvancaUmaPagina);
-    ul.appendChild(linkUltimaPagina);
     ul.appendChild(liInfo);
     ul.appendChild(liQtdRegistros);
     div.appendChild(ul);

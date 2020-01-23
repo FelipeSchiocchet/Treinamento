@@ -1,8 +1,11 @@
-/*estilos de todas as páginas*/
+/*estilos de todas as pÃ¡ginas*/
+
 .font {
     font-family: Tahoma;
 }
-/*estilos da página logon.asp*/
+
+/*estilos da pÃ¡gina logon.asp*/
+
 .center {
     display: block;
     margin-left: auto;
@@ -10,24 +13,30 @@
     margin-top: 200px;
     width: 200px;
 }
-.u{
-    color:aqua;
+
+.u {
+    color: aqua;
 }
+
 .img {
     text-align: center;
 }
+
 .form {
-    text-align:center;
+    text-align: center;
 }
+
 .usuario {
     margin-bottom: 7px;
     width: 160px;
 }
+
 .senha {
     margin-bottom: 7px;
     width: 160px;
     margin-left: 10px;
 }
+
 .alerta {
     border: 1px solid #a81002;
     background-color: salmon;
@@ -46,68 +55,83 @@
   bottom: 30px;*/
     margin-bottom: 7px;
 }
+
 .alerta-error {
     border-color: #e8273b;
     color: #FFF;
     background-color: #ed5565;
 }
+
 .alerta-sucesso {
     border-color: #87c940;
     color: #FFF;
     background-color: #a0d468;
 }
+
 .alerta-atencao {
     border-color: #f4a911;
     color: #FFF;
     background-color: #f6bb42;
 }
+
 .alerta-info {
     border-color: #2f80e7;
     color: #FFF;
     background-color: #5d9cec;
 }
+
 .alerta-show {
     display: block;
     -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
     animation: fadein 0.5s, fadeout 0.5s 2.5s;
 }
-/*estilos da página usuariocadastro.asp*/
+
+/*estilos da pï¿½gina usuariocadastro.asp*/
+
 .usuarioC {
     margin-bottom: 7px;
     margin-left: 16px;
     width: 20%;
 }
+
 .senhaC {
     margin-bottom: 7px;
     margin-left: 27px;
     width: 20%;
 }
+
 .nome {
     margin-bottom: 7px;
     margin-left: 28px;
     width: 46.33%;
 }
+
 .endereco {
     margin-bottom: 7px;
     margin-left: 4px;
     width: 20%;
 }
+
 .cidade {
     margin-bottom: 7px;
     margin-left: 23px;
     width: 20%;
 }
+
 .cep {
     margin-bottom: 7px;
     margin-left: 42px;
     width: 20%;
 }
+
 .estadoid {
     margin-bottom: 35px;
     margin-left: 22px;
     width: 20.35%;
 }
-/*estilo das páginas usuariocadastro.asp e TarefaCadastro.asp*/
+
+/*estilo das pï¿½ginas usuariocadastro.asp e TarefaCadastro.asp*/
+
 .botao {
     font-size: 16px;
     width: 100px;
@@ -120,79 +144,99 @@
 #deletar {
     display: none;
 }
-/*estilos da página TarefaCadastro.asp*/
+
+/*estilos da pï¿½gina TarefaCadastro.asp*/
+
 .titulo {
     margin-bottom: 7px;
     margin-left: 40px;
     width: 40%;
 }
+
 .geradorID {
     margin-bottom: 7px;
     margin-left: 28px;
     width: 15%;
 }
+
 .descricao {
     margin-left: 12px;
     width: 40%;
 }
+
 .status {
     margin-bottom: 7px;
     margin-left: 35px;
     width: 15%;
 }
+
 .data {
     margin-bottom: 35px;
     margin-left: 46px;
     width: 14.6%;
 }
-/*estilos das páginas listausuario.asp e lista.asp*/
+
+/*estilos das pï¿½ginas listausuario.asp e lista.asp*/
+
 table {
     font-family: Tahoma;
     border-collapse: collapse;
     width: 100%;
 }
+
 td, th {
-    border: 1px ;
+    border: 1px;
     text-align: left;
     padding: 8px;
 }
+
 th {
     background-color: #aaa;
 }
+
 .paginacao {
     background-color: #aaa;
 }
+
 .paginacao2 {
     background-color: #aaa;
     text-align: right;
 }
-div{
-    display:block;
+
+div {
+    display: block;
 }
+
 tr:nth-child(even) {
     background-color: #DDD;
 }
+
 .editar {
     width: 12px;
     height: 12px;
     border: 0
 }
+
 thead, tfoot {
     background-color: #aaa;
 }
+
 .pagination ul {
     list-style-type: none;
     margin: 0px;
     padding: 0px;
 }
+
 .pagination li {
     display: inline-block;
 }
+
 .pagination input {
     width: 40px;
     padding: 4px;
     margin: auto 5px;
 }
+
 .pagination a {
     text-decoration: none;
     margin: auto 5px;
@@ -201,7 +245,8 @@ thead, tfoot {
     background-color: lightblue;
     border: 1px solid black;
 }
-/*estilos da página testes.asp*/
+
+/*estilos da pï¿½gina testes.asp*/
 
 #my_form {
     display: none;
