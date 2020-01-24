@@ -4,7 +4,8 @@
 <head>
     <title>Lista usuário</title>
     <link rel="stylesheet" type="text/css" href="css/style.css">
-    <script type="text/javascript" src="jscripts/listausuario.js"></script>
+    <meta charset="utf-8"> 
+    
 </head>
 
 <body>
@@ -12,7 +13,7 @@
     <p><a href="http://localhost/treinamento/Cliente/usuariocadastro.asp" class="novo">Novo Usuário</a></p>
     <table id="tblUsuarios"></table>
     <script type="text/javascript" src="jscripts/jquery.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="jscripts/listausuario.js"></script>
 </body>
 
 </html>

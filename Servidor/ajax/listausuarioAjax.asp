@@ -5,7 +5,9 @@ Response.CharSet = "UTF-8"
 Response.ContentType = "application/json"
 
 if (Request("fnTarget") <> "") then
-Execute(Request("fnTarget") & "()")
+    intLimit = Request("RegistrosPorPagina")
+    Npagina = Request("PaginaPesquisa")
+    Execute(Request("fnTarget") & "()")
 end if
    
 dim intLimit
@@ -15,12 +17,16 @@ dim botao
 dim btnAcao
 dim inputAcao
 dim Ndepaginas, Ndepaginas2
+dim bataoavancar
 
 function BuscarUsuariosPaginados()
-    stop 
-    intLimit = "30"
-     set recordSet = Server.CreateObject("ADODB.recordset")
-    call recordSet.Open("SELECT usuid FROM usuario ORDER BY usuid asc;",cn,1,1)  
+    Npagina = CInt(Npagina)
+    intLimit = CInt(intLimit)
+    set recordSet = Server.CreateObject("ADODB.recordset")
+    call recordSet.Open("SELECT usuid FROM usuario ORDER BY usuid asc;",cn,1,1) 
+    intTotal = recordSet.recordcount
+    recordSet.pageSize = intLimit
+    recordSet.AbsolutePage = Npagina
      strIDs = "0"
     if not recordSet.eof then
         strIDs = recordSet.GetString(,intLimit,"",",","")
@@ -28,13 +34,14 @@ function BuscarUsuariosPaginados()
     end if
     recordSet.close()  
     call recordSet.Open("SELECT * FROM usuario WHERE usuid in("& strIDs &") ORDER BY usuid ASC;",cn,1,1)
+    recordSet.pageSize = intLimit
     response.Write "{"
     response.Write """TotalRegistros"":""" & intTotal & """"
     response.Write ",""RegistrosPorPagina"":""" & intLimit & """"
     response.Write ",""PaginaAtual"":""" & Npagina & """"
     response.Write ",""TotalPaginas"":""" & Ndepaginas & """"
     response.Write ",""Dados"":["
-    
+    stop
     Do While (not recordSet.EOF)
         response.Write  "{"
             response.Write      """Nome"": """ & recordSet("nome") & """"
@@ -53,20 +60,9 @@ function BuscarUsuariosPaginados()
     response.Write "}" 
 
     recordSet.close()
-    if numeroAtual = intTotal then
-        voltarDisableddenovo = "disabled"
-    end if
+    
 end function 
 
-' function botao()
-
-' stop      
-'     inputAcao = request.("input")
-'     if inputAcao = "" then 
-'         btnAcao = request.form("botao")
-'     else
-'         btnAcao = 0
-'     end if
 '     if inputAcao = "" then 
 '         if btnAcao = ">>" then
 '             btnAcao = 1
@@ -77,10 +73,10 @@ end function
 '         inputAcao = 0 
 '     end if
 '     Npagina = request.form("Npagina")
-           
+
 '     Npagina = CInt(Npagina)
 '     inputAcao = CInt(inputAcao)
-                     
+        
 '     intLimit = 30
 '     set recordSet = Server.CreateObject("ADODB.recordset")
 '     call recordSet.Open("SELECT usuid FROM usuario ORDER BY usuid asc;",cn,1,1)
@@ -89,7 +85,7 @@ end function
 '     if Ndepaginas >= Ndepaginas2 then
 '         Ndepaginas = Ndepaginas - 1 
 '     end if
-            
+
 '     if btnAcao = "-1" then
 '         Npagina = Npagina + btnAcao     
 '     end if
@@ -126,10 +122,11 @@ end function
 '     call recordSet.Open("SELECT * FROM usuario WHERE usuid in("& strIDs &") ORDER BY usuid ASC;",cn,1,1)
 
 '     recordSet.pageSize = intLimit
-            
+
 '     numeroAtual = intLimit * (Npagina - 1) + recordSet.recordcount
 '     recordSet.close()
-' end function
-
+'     if numeroAtual = intTotal then
+'       voltarDisableddenovo = "disabled"
+'     end if
 
 %>

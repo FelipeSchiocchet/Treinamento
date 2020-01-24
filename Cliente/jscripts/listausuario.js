@@ -1,15 +1,46 @@
+
+if (PaginaPesquisa = "") then
+var PaginaPesquisa = 1;
+
+var RegistrosPorPagina = 30;
 window.addEventListener('load', function () {
-    BuscarUsuarios("BuscarUsuariosPaginados", 20, 1);
-    AdicionarEventos(event);
+    BuscarUsuarios("BuscarUsuariosPaginados", RegistrosPorPagina, PaginaPesquisa);
+
 });
+
+
+
+function BuscarUsuarios(fnTarget, RegistrosPorPagina, PaginaPesquisa) {
+    dadosPesquisa = {
+        "fnTarget": fnTarget,
+        "RegistrosPorPagina": RegistrosPorPagina,
+        "PaginaPesquisa": PaginaPesquisa,
+    }
+    return $.ajax({
+        url: "../Servidor/ajax/listausuarioAjax.asp",
+        type: 'POST',
+        data: dadosPesquisa,
+        success: function (data) {
+            PreencheTabela(data);
+            AdicionarEventos(event);
+        },
+        error: function (xhr, status, error) {
+            alert("Erro: " + xhr + status + error);
+        }
+    });
+}
 
 function AdicionarEventos(event) {
     $input = document.getElementById("input");
-    $botao = document.getElementById("botao");
-    debugger;
-    $botao.addEventListener("click", function (e) {
-        debugger;
-        botao(e);
+    $botaovoltar = document.getElementById("botaovoltar");
+    $botaoavancar = document.getElementById("botaoavancar");
+    $botaovoltar.addEventListener("click", function (e) {
+        voltar(e);
+    });
+
+    $botaoavancar.addEventListener("click", function (e) {
+        avancar(e);
+
     });
 
     $input.addEventListener("keydown", function (e) {
@@ -17,7 +48,6 @@ function AdicionarEventos(event) {
             input(e);
         }
     });
-
 }
 
 function input(e) {
@@ -36,41 +66,25 @@ function input(e) {
     });
 }
 
-function botao(e) {
-    return $.ajax({
-        url: "../Servidor/ajax/listausuarioAjax.asp",
-        type: 'POST',
-        data: {
-            fnTarget: "botao",
-        },
-        success: function (data) {
-            alert("Teste");
-        },
-        error: function (xhr, status, error) {
-            alert("Erro: " + xhr + status + error);
-        }
-    });
-}
-
-function BuscarUsuarios(fnTarget, RegistrosPorPagina, PaginaPesquisa) {
-debugger;
-    dadosPesquisa = {
-        "fnTarget": fnTarget,
-        "RegistrosPorPagina": RegistrosPorPagina,
-        "PaginaPesquisa": PaginaPesquisa,
-    }
-    return $.ajax({
-        url: "../Servidor/ajax/listausuarioAjax.asp",
-        type: 'POST',
-        data: dadosPesquisa,
-        success: function (data) {
-            debugger
-            PreencheTabela(data);
-        },
-        error: function (xhr, status, error) {
-            alert("Erro: " + xhr + status + error);
-        }
-    });
+function avancar(e) {
+    PaginaPesquisa = PaginaPesquisa + 1;
+    //document.getElementsByTagName("tr").remove();
+    $("#tblUsuarios tr").remove();
+    BuscarUsuarios("BuscarUsuariosPaginados", RegistrosPorPagina, PaginaPesquisa);
+    // document.location.reload(true);
+    // return $.ajax({
+    //     url: "../Servidor/ajax/listausuarioAjax.asp",
+    //     type: 'POST',
+    //     data: {
+    //         fnTarget: "avancar",
+    //     },
+    //     success: function (data) {
+    //         alert("Teste");
+    //     },
+    //     error: function (xhr, status, error) {
+    //         alert("Erro: " + xhr + status + error);
+    //     }
+    // });
 }
 
 function PreencheTabela(dados) {
@@ -115,7 +129,7 @@ function TabelaCriarCorpo(tabela, dadosCorpo) {
                 var url = 'usuarioCadastro.asp?' + params.toString();
                 a.href = url;
                 var imagem = document.createElement("IMG");
-                imagem.src = "../imagens/editar.png";
+                imagem.src = "./imagens/editar.png";
                 a.appendChild(imagem);
                 cell.appendChild(a);
                 break;
@@ -131,17 +145,17 @@ function TabelaCriarRodape(tabela, dados) {
     var row = tfoot.insertRow(0); //<tr></tr>
     var cell = row.insertCell(0);//<th></th>
     cell.colSpan = tabela.rows[0].cells.length;
-
+    debugger;
     var div = document.createElement("div");//<div></div>
     div.setAttribute("class", "pagination");//<div class="pagination">
 
     var ul = document.createElement("ul");//<ul></ul>;
 
-    var linkVoltaUmaPagina = document.createElement("a");//<a></a>
-    linkVoltaUmaPagina.href = "listausuario.asp"; // href="listausuario.asp">
-    var liVoltaUmaPagina = document.createElement("li");//<li></li>;
+    var linkVoltaUmaPagina = document.createElement("b");//<a></a>
+    var liVoltaUmaPagina = document.createElement("button");//<li></li>;
     liVoltaUmaPagina.innerText = "<<"; // <<
-    liVoltaUmaPagina.id = "<<";// id="<<""
+    //liAvancaUmaPagina.type = "submit";//type="submit"
+    liVoltaUmaPagina.id = "botaovoltar";// id="<<""
     linkVoltaUmaPagina.appendChild(liVoltaUmaPagina);//<a href="#"><li> << </li></a>
 
     var inputPagina = document.createElement("input");// <input/>
@@ -150,11 +164,11 @@ function TabelaCriarRodape(tabela, dados) {
     inputPagina.name = "input";//name="input" 
 
 
-    var linkAvancaUmaPagina = document.createElement("a");//<a></a>
-    linkAvancaUmaPagina.href = "listausuario.asp"; // href="listausuario.asp">
-    var liAvancaUmaPagina = document.createElement("li");//<li></li>;
+    var linkAvancaUmaPagina = document.createElement("b");//<a></a>
+    var liAvancaUmaPagina = document.createElement("button");//<li></li>;
     liAvancaUmaPagina.innerText = ">>"; // >>
-    liAvancaUmaPagina.id = ">>";// id=">>"
+    liAvancaUmaPagina.type = "submit";//type="submit"
+    liAvancaUmaPagina.id = "botaoavancar";// id="botaoavancar"
     linkAvancaUmaPagina.appendChild(liAvancaUmaPagina);//<a href="#"><li> >> </li></a>
 
 
@@ -164,7 +178,7 @@ function TabelaCriarRodape(tabela, dados) {
 
     ul.appendChild(linkVoltaUmaPagina);
     ul.appendChild(inputPagina);
-    ul.appendChild(linkAvancaUmaPagina);
+    ul.appendChild(liAvancaUmaPagina);
     ul.appendChild(liInfo);
     div.appendChild(ul);
     cell.appendChild(div);

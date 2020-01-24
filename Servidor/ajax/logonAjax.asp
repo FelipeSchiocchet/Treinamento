@@ -3,7 +3,7 @@
 if (Request("fnTarget") <> "") then
     Execute(Request("fnTarget") & "()")
 end if
-    stop
+ 
 function validarLogon()
     
     dim usuario
