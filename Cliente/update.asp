@@ -1,6 +1,5 @@
-<!-- #include file = "configs/config.asp" -->
+<!-- #include file = "../configs/config.asp" -->
 <%  
-
     tarID = request("id")
     tarStatus = request("status")
     tarTitulo = request("titulo")

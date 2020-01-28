@@ -1,14 +1,214 @@
-(function () {
-    adicionarEventos();
-})();
+if (PaginaPesquisa = "") then
+var PaginaPesquisa = 1;
 
-function adicionarEventos() {
-    
+var RegistrosPorPagina = 30;
+window.addEventListener('load', function () {
+    BuscarTarefas("BuscarTarefasPaginadas", RegistrosPorPagina, PaginaPesquisa);
+});
+
+function BuscarTarefas(fnTarget, RegistrosPorPagina, PaginaPesquisa) {
+    dadosPesquisa = {
+        "fnTarget": fnTarget,
+        "RegistrosPorPagina": RegistrosPorPagina,
+        "PaginaPesquisa": PaginaPesquisa,
+    }
+    return $.ajax({
+        url: "../Servidor/ajax/listaAjax.asp",
+        type: 'POST',
+        data: dadosPesquisa,
+        success: function (data) {
+            PreencheTabela(data);
+            AdicionarEventos(data);
+        },
+        error: function (xhr, status, error) {
+            alert("Erro: " + xhr + status + error);
+        }
+    });
 }
 
+function AdicionarEventos(dados) {
+    $input = document.getElementById("input");
+    $botaovoltar = document.getElementById("botaovoltar");
+    $botaoavancar = document.getElementById("botaoavancar");
+    $botaovoltar.addEventListener("click", function (e) {
+        voltar(e);
+    });
+
+    $botaoavancar.addEventListener("click", function (e) {
+        avancar(e);
+    });
+
+    $input.addEventListener("keydown", function (e) {
+        if (e.keyCode == 13) {
+            input(dados);
+        }
+    });
+}
+
+function input(dados) {
+    PaginaPesquisa = isNaN($input.value) ? 1 : Number($input.value);
+    if (PaginaPesquisa <= 0) {
+        PaginaPesquisa = 1
+    }
+    if (PaginaPesquisa > dados.TotalPaginas) {
+        PaginaPesquisa = Number(dados.TotalPaginas)
+    }
+    var table = document.getElementById("tblTarefas")
+    while (table.rows.length > 0) {
+        table.deleteRow(0);
+    }
+    BuscarTarefas("BuscarTarefasPaginadas", RegistrosPorPagina, PaginaPesquisa);
+}
+
+function avancar(e) {
+    PaginaPesquisa = Number(PaginaPesquisa + 1);
+    var table = document.getElementById("tblTarefas")
+    while (table.rows.length > 0) {
+        table.deleteRow(0);
+    }
+    BuscarTarefas("BuscarTarefasPaginadas", RegistrosPorPagina, PaginaPesquisa);
+}
+function voltar(e) {
+    PaginaPesquisa = Number(PaginaPesquisa - 1);
+    var table = document.getElementById("tblTarefas")
+    while (table.rows.length > 0) {
+        table.deleteRow(0);
+    }
+    BuscarTarefas("BuscarTarefasPaginadas", RegistrosPorPagina, PaginaPesquisa);
+}
+
+function PreencheTabela(dados) {
+    if (!dados) {
+        return;
+    }
+
+    var dadosCabecalho = Object.keys(dados.Dados[0]);
+    var dadosCorpo = dados.Dados;
+    var dadosRodape = {
+        "TotalRegistros": dados.TotalRegistros,
+        "RegistrosPorPagina": dados.RegistrosPorPagina,
+        "PaginaAtual": dados.PaginaAtual,
+        "TotalPaginas": dados.TotalPaginas,
+    }
+    var $tblTarefa = document.getElementById("tblTarefas");
+    TabelaCriarCabecalho($tblTarefa, dadosCabecalho);
+    TabelaCriarCorpo($tblTarefa, dadosCorpo);
+    TabelaCriarRodape($tblTarefa, dadosRodape);
+}
+
+function TabelaCriarCabecalho(tabela, dadosCabecalho) {
+    var cabecalho = tabela.createTHead();
+    var novaLinha = cabecalho.insertRow();
+    for (var key of dadosCabecalho) {
+        var th = document.createElement("th");
+        var texto = document.createTextNode(key);
+        if (key == 'usuid') {
+            texto = document.createTextNode('Editar');
+        }
+        th.appendChild(texto);
+        novaLinha.appendChild(th);
+    }
+}
+
+function TabelaCriarCorpo(tabela, dadosCorpo) {
+    var tbody = tabela.createTBody();
+    for (var element of dadosCorpo) {
+        var row = tbody.insertRow();
+        for (key in element) {
+            var cell = row.insertCell();
+            if (key == 'tarID') {
+                var a = document.createElement("a");
+                var params = new URLSearchParams();
+                params.append(key, element[key]);
+                var url = 'tarefacadastro.asp?' + params.toString();
+                a.href = url;
+                a.innerText = element[key];
+                cell.appendChild(a);
+                continue;
+            }
+            if (key == 'Status') {
+
+                var imagem = document.createElement("img");
+                imagem.src = "./imagens/" + element[key] + ".gif";
+                imagem.id = element['tarID'];
+                imagem.addEventListener("dblclick", function (e) {
+                    mudarImagem(e);
+                });
+                cell.appendChild(imagem);
+                continue;
+            }
+            var text = document.createTextNode(element[key]);
+            cell.appendChild(text);
+        }
+    }
+}
+
+function TabelaCriarRodape(tabela, dados) {
+    var tfoot = tabela.createTFoot();//<tfoot></tfoot>
+    var row = tfoot.insertRow(0);//<tr></tr>
+    var cell2 = row.insertCell(0);//<th></th>
+    cell2.colSpan = 2;
+    var cell = row.insertCell(0);//<th></th>
+    cell.colSpan = 4;
+    var div = document.createElement("div");//<div></div>
+    div.setAttribute("class", "pagination");//<div class="pagination">
+    var div2 = document.createElement("div");//<div></div>
+    div2.setAttribute("class", "motrarRegistros");//<div class="motrarRegistros">
+
+    var ul = document.createElement("ul");//<ul></ul>;
+    var ul2 = document.createElement("ul");//<ul></ul>;
+
+    var linkVoltaUmaPagina = document.createElement("b");//<a></a>
+    var liVoltaUmaPagina = document.createElement("button");//<li></li>;
+    liVoltaUmaPagina.innerText = "<<";// <<
+    liVoltaUmaPagina.type = "submit";//type="submit"
+    liVoltaUmaPagina.id = "botaovoltar";// id="botaovoltar""
+    liVoltaUmaPagina.classList.add("botaovoltar");// class="botaovoltar""
+    linkVoltaUmaPagina.appendChild(liVoltaUmaPagina);//<a href="#"><li> << </li></a>
+
+    var inputPagina = document.createElement("input");// <input/>
+    inputPagina.type = "text";//type="text"
+    inputPagina.id = "input";// id="input"
+    inputPagina.name = "input";//name="input" 
 
 
-function mudarImagem(objImagem, tarID) {
+    var linkAvancaUmaPagina = document.createElement("b");//<a></a>
+    var liAvancaUmaPagina = document.createElement("button");//<li></li>;
+    liAvancaUmaPagina.innerText = ">>";// >>
+    liAvancaUmaPagina.type = "submit";//type="submit"
+    liAvancaUmaPagina.id = "botaoavancar";// id="botaoavancar"
+    liAvancaUmaPagina.classList.add("botaoavancar");// class="botaoavancar""
+    linkAvancaUmaPagina.appendChild(liAvancaUmaPagina);//<a href="#"><li> >> </li></a>
+
+    var liPagina = document.createElement("li");//<li></li>;
+    liPagina.innerText = "Página " + dados.PaginaAtual + " de " + dados.TotalPaginas + " Páginas";// Página 1 de 2 Páginas
+    var liInfo = document.createElement("li");//<li></li>;
+    liInfo.innerText = "Mostrando " + dados.RegistrosPorPagina + " de " + dados.TotalRegistros + " Registros";// Mostrando 2 de 2 registros
+
+
+    ul.appendChild(liVoltaUmaPagina);
+    ul.appendChild(inputPagina);
+    ul.appendChild(liAvancaUmaPagina);
+    div.appendChild(ul);
+    cell.appendChild(div);
+    ul2.appendChild(liPagina);
+    ul2.appendChild(liInfo);
+    div2.appendChild(ul2);
+    cell2.appendChild(div2);
+
+    if (dados.PaginaAtual == dados.TotalPaginas) {
+        if (!document.getElementById('botaoavancar').disabled)
+            document.getElementById('botaoavancar').disabled = true;
+    }
+    if (dados.PaginaAtual <= 1) {
+        if (!document.getElementById('botaovoltar').disabled)
+            document.getElementById('botaovoltar').disabled = true;
+    }
+}
+
+function mudarImagem(e) {
+    debugger;
+    var objImagem = e.currentTarget;
     if (objImagem.src.indexOf("0") > -1) {         
         objImagem.src = "./imagens/7.gif";
         status = 7;
@@ -27,15 +227,15 @@ function mudarImagem(objImagem, tarID) {
 
     }
     return $.ajax({
-        url: "update.asp",
+        url: "./update.asp",
         type: 'POST',
         data: {
             "status": status,
-            "id": tarID
+            "id": objImagem.id
         },
         success: function (status) {
             if (objImagem.src.indexOf("1") > -1) {      
-            alert('Tarefa n�o iniciada')    
+            alert('Tarefa não iniciada')    
             }
             else if (objImagem.src.indexOf("0") > -1) {
                 alert('Tarefa em andamento')
@@ -44,7 +244,7 @@ function mudarImagem(objImagem, tarID) {
                 alert('Tarefa Cancelada')
             }
             else if (objImagem.src.indexOf("9") > -1) {
-                alert('Tarefa conclu�da')
+                alert('Tarefa concluída')
             }
             location.reload();
         },
@@ -54,58 +254,52 @@ function mudarImagem(objImagem, tarID) {
     });
 }
 
+// function myFunction(event) {
 
-function myFunction(event) {
+//     if (event.keyCode === 13) {
+//         event.preventDefault();
+//         document.getElementById("input").submit();
+//     }
+// }
 
-    if (event.keyCode === 13) {
-        event.preventDefault();
-        document.getElementById("input").submit();
-    }
-}
+// function edicaoTarefa(tableData, tarID) {
+//     var titulo = tableData.textContent;
+//     tableData.textContent = "";
+//     var input = document.createElement("input");
+//     input.value = titulo;
 
+//     input.addEventListener('keydown', function (e) {
+// debugger
+//         if (e.keyCode == 13) {
 
+//             salvaTarefa(input.value, tarID);
+//         }
+//         if (e.keyCode == 27) {
+//             e.target.parentElement.innerHTML = titulo;
+//         }
+//     });
+//     input.addEventListener('blur', function (e) {
+//         debugger
+//         e.target.parentElement.innerHTML = titulo;
+//     });
 
-function edicaoTarefa(tableData, tarID) {
-    var titulo = tableData.textContent;
-    tableData.textContent = "";
-    var input = document.createElement("input");
-    input.value = titulo;
+//     tableData.appendChild(input);
+//  }   
 
-    input.addEventListener('keydown', function (e) {
-debugger
-        if (e.keyCode == 13) {
+// function salvaTarefa(txt, tarID) {
 
-            salvaTarefa(input.value, tarID);
-        }
-        if (e.keyCode == 27) {
-            e.target.parentElement.innerHTML = titulo;
-        }
-    });
-    input.addEventListener('blur', function (e) {
-        debugger
-        e.target.parentElement.innerHTML = titulo;
-    });
-
-    tableData.appendChild(input);
- }   
-   
-
-
-function salvaTarefa(txt, tarID) {
-
-    return $.ajax({
-        url: "update.asp",
-        type: 'POST',
-        data: {
-            "titulo": txt,
-            "id": tarID
-        },
-        success: function (titulo) {
-            location.reload();
-        },
-        error: function (xhr, titulo, error) {
-            alert("Erro: " + error.Message);
-        }
-    });
-}
-
+//     return $.ajax({
+//         url: "update.asp",
+//         type: 'POST',
+//         data: {
+//             "titulo": txt,
+//             "id": tarID
+//         },
+//         success: function (titulo) {
+//             location.reload();
+//         },
+//         error: function (xhr, titulo, error) {
+//             alert("Erro: " + error.Message);
+//         }
+//     });
+// }

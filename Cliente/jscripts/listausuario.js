@@ -1,14 +1,10 @@
-
 if (PaginaPesquisa = "") then
 var PaginaPesquisa = 1;
 
 var RegistrosPorPagina = 30;
 window.addEventListener('load', function () {
     BuscarUsuarios("BuscarUsuariosPaginados", RegistrosPorPagina, PaginaPesquisa);
-
 });
-
-
 
 function BuscarUsuarios(fnTarget, RegistrosPorPagina, PaginaPesquisa) {
     dadosPesquisa = {
@@ -50,7 +46,7 @@ function AdicionarEventos(dados) {
 }
 
 function input(dados) {
-    PaginaPesquisa = Number($input.value);
+    PaginaPesquisa = isNaN($input.value) ? 1 : Number($input.value);
     if (PaginaPesquisa <= 0) {
         PaginaPesquisa = 1
     }
@@ -174,7 +170,7 @@ function TabelaCriarRodape(tabela, dados) {
     liAvancaUmaPagina.id = "botaoavancar";// id="botaoavancar"
     liAvancaUmaPagina.classList.add("botaoavancar");// class="botaoavancar""
     linkAvancaUmaPagina.appendChild(liAvancaUmaPagina);//<a href="#"><li> >> </li></a>
-    
+
     var liPagina = document.createElement("li");//<li></li>;
     liPagina.innerText = "Página " + dados.PaginaAtual + " de " + dados.TotalPaginas + " Páginas"; // Página 1 de 2 Páginas
     var liInfo = document.createElement("li");//<li></li>;
