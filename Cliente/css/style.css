@@ -194,15 +194,6 @@ th {
     background-color: #aaa;
 }
 
-.paginacao {
-    background-color: #aaa;
-}
-
-.paginacao2 {
-    background-color: #aaa;
-    text-align: right;
-}
-
 div {
     display: block;
 }
@@ -227,10 +218,6 @@ thead, tfoot {
     padding: 0px;
 }
 
-.pagination li {
-    display: inline-block;
-}
-
 .pagination input {
     width: 40px;
     padding: 4px;
@@ -246,6 +233,13 @@ thead, tfoot {
     border: 1px solid black;
 }
 
+.motrarRegistros ul {
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+    display: inline-block;
+    font-weight: 900;
+}
 /*estilos da p�gina testes.asp*/
 
 #my_form {

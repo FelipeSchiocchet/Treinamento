@@ -16,14 +16,16 @@ dim Npagina
 dim botao
 dim btnAcao
 dim inputAcao
-dim Ndepaginas, Ndepaginas2
+dim Ndepaginas
 dim bataoavancar
 
 function BuscarUsuariosPaginados()
+stop
     Npagina = CInt(Npagina)
     intLimit = CInt(intLimit)
     set recordSet = Server.CreateObject("ADODB.recordset")
-    call recordSet.Open("SELECT usuid FROM usuario ORDER BY usuid asc;",cn,1,1) 
+    call recordSet.Open("SELECT usuid FROM usuario ORDER BY usuid asc;",cn,1,1)
+    Ndepaginas = recordSet.recordcount \ 30 + 1
     intTotal = recordSet.recordcount
     recordSet.pageSize = intLimit
     recordSet.AbsolutePage = Npagina
@@ -37,11 +39,10 @@ function BuscarUsuariosPaginados()
     recordSet.pageSize = intLimit
     response.Write "{"
     response.Write """TotalRegistros"":""" & intTotal & """"
-    response.Write ",""RegistrosPorPagina"":""" & intLimit & """"
+    response.Write ",""RegistrosPorPagina"":""" & recordSet.RecordCount & """"
     response.Write ",""PaginaAtual"":""" & Npagina & """"
     response.Write ",""TotalPaginas"":""" & Ndepaginas & """"
     response.Write ",""Dados"":["
-    stop
     Do While (not recordSet.EOF)
         response.Write  "{"
             response.Write      """Nome"": """ & recordSet("nome") & """"

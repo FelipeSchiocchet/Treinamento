@@ -22,7 +22,7 @@ function BuscarUsuarios(fnTarget, RegistrosPorPagina, PaginaPesquisa) {
         data: dadosPesquisa,
         success: function (data) {
             PreencheTabela(data);
-            AdicionarEventos(event);
+            AdicionarEventos(data);
         },
         error: function (xhr, status, error) {
             alert("Erro: " + xhr + status + error);
@@ -30,7 +30,7 @@ function BuscarUsuarios(fnTarget, RegistrosPorPagina, PaginaPesquisa) {
     });
 }
 
-function AdicionarEventos(event) {
+function AdicionarEventos(dados) {
     $input = document.getElementById("input");
     $botaovoltar = document.getElementById("botaovoltar");
     $botaoavancar = document.getElementById("botaoavancar");
@@ -40,54 +40,52 @@ function AdicionarEventos(event) {
 
     $botaoavancar.addEventListener("click", function (e) {
         avancar(e);
-
     });
 
     $input.addEventListener("keydown", function (e) {
         if (e.keyCode == 13) {
-            input(e);
+            input(dados);
         }
     });
 }
 
-function input(e) {
-    return $.ajax({
-        url: "../Servidor/ajax/listausuarioAjax.asp",
-        type: 'POST',
-        data: {
-            fnTarget: "botao",
-        },
-        success: function (data) {
-            alert("Teste");
-        },
-        error: function (xhr, status, error) {
-            alert("Erro: " + xhr + status + error);
-        }
-    });
+function input(dados) {
+    PaginaPesquisa = Number($input.value);
+    if (PaginaPesquisa <= 0) {
+        PaginaPesquisa = 1
+    }
+    if (PaginaPesquisa > dados.TotalPaginas) {
+        PaginaPesquisa = Number(dados.TotalPaginas)
+    }
+    var table = document.getElementById("tblUsuarios")
+    while (table.rows.length > 0) {
+        table.deleteRow(0);
+    }
+    BuscarUsuarios("BuscarUsuariosPaginados", RegistrosPorPagina, PaginaPesquisa);
 }
 
 function avancar(e) {
-    PaginaPesquisa = PaginaPesquisa + 1;
-    //document.getElementsByTagName("tr").remove();
-    $("#tblUsuarios tr").remove();
+    PaginaPesquisa = Number(PaginaPesquisa + 1);
+    var table = document.getElementById("tblUsuarios")
+    while (table.rows.length > 0) {
+        table.deleteRow(0);
+    }
     BuscarUsuarios("BuscarUsuariosPaginados", RegistrosPorPagina, PaginaPesquisa);
-    // document.location.reload(true);
-    // return $.ajax({
-    //     url: "../Servidor/ajax/listausuarioAjax.asp",
-    //     type: 'POST',
-    //     data: {
-    //         fnTarget: "avancar",
-    //     },
-    //     success: function (data) {
-    //         alert("Teste");
-    //     },
-    //     error: function (xhr, status, error) {
-    //         alert("Erro: " + xhr + status + error);
-    //     }
-    // });
+}
+function voltar(e) {
+    PaginaPesquisa = Number(PaginaPesquisa - 1);
+    var table = document.getElementById("tblUsuarios")
+    while (table.rows.length > 0) {
+        table.deleteRow(0);
+    }
+    BuscarUsuarios("BuscarUsuariosPaginados", RegistrosPorPagina, PaginaPesquisa);
 }
 
 function PreencheTabela(dados) {
+    if (!dados) {
+        return;
+    }
+
     var dadosCabecalho = Object.keys(dados.Dados[0]);
     var dadosCorpo = dados.Dados;
     var dadosRodape = {
@@ -143,19 +141,24 @@ function TabelaCriarCorpo(tabela, dadosCorpo) {
 function TabelaCriarRodape(tabela, dados) {
     var tfoot = tabela.createTFoot(); //<tfoot></tfoot>
     var row = tfoot.insertRow(0); //<tr></tr>
+    var cell2 = row.insertCell(0);//<th></th>
+    cell2.colSpan = 2;
     var cell = row.insertCell(0);//<th></th>
-    cell.colSpan = tabela.rows[0].cells.length;
-    debugger;
+    cell.colSpan = 4;
     var div = document.createElement("div");//<div></div>
     div.setAttribute("class", "pagination");//<div class="pagination">
+    var div2 = document.createElement("div");//<div></div>
+    div2.setAttribute("class", "motrarRegistros");//<div class="motrarRegistros">
 
     var ul = document.createElement("ul");//<ul></ul>;
+    var ul2 = document.createElement("ul");//<ul></ul>;
 
     var linkVoltaUmaPagina = document.createElement("b");//<a></a>
     var liVoltaUmaPagina = document.createElement("button");//<li></li>;
     liVoltaUmaPagina.innerText = "<<"; // <<
-    //liAvancaUmaPagina.type = "submit";//type="submit"
-    liVoltaUmaPagina.id = "botaovoltar";// id="<<""
+    liVoltaUmaPagina.type = "submit";//type="submit"
+    liVoltaUmaPagina.id = "botaovoltar";// id="botaovoltar""
+    liVoltaUmaPagina.classList.add("botaovoltar");// class="botaovoltar""
     linkVoltaUmaPagina.appendChild(liVoltaUmaPagina);//<a href="#"><li> << </li></a>
 
     var inputPagina = document.createElement("input");// <input/>
@@ -169,17 +172,31 @@ function TabelaCriarRodape(tabela, dados) {
     liAvancaUmaPagina.innerText = ">>"; // >>
     liAvancaUmaPagina.type = "submit";//type="submit"
     liAvancaUmaPagina.id = "botaoavancar";// id="botaoavancar"
+    liAvancaUmaPagina.classList.add("botaoavancar");// class="botaoavancar""
     linkAvancaUmaPagina.appendChild(liAvancaUmaPagina);//<a href="#"><li> >> </li></a>
-
-
+    
+    var liPagina = document.createElement("li");//<li></li>;
+    liPagina.innerText = "Página " + dados.PaginaAtual + " de " + dados.TotalPaginas + " Páginas"; // Página 1 de 2 Páginas
     var liInfo = document.createElement("li");//<li></li>;
     liInfo.innerText = "Mostrando " + dados.RegistrosPorPagina + " de " + dados.TotalRegistros + " Registros"; // Mostrando 2 de 2 registros
 
 
-    ul.appendChild(linkVoltaUmaPagina);
+    ul.appendChild(liVoltaUmaPagina);
     ul.appendChild(inputPagina);
     ul.appendChild(liAvancaUmaPagina);
-    ul.appendChild(liInfo);
     div.appendChild(ul);
     cell.appendChild(div);
+    ul2.appendChild(liPagina);
+    ul2.appendChild(liInfo);
+    div2.appendChild(ul2);
+    cell2.appendChild(div2);
+
+    if (dados.PaginaAtual == dados.TotalPaginas) {
+        if (!document.getElementById('botaoavancar').disabled)
+            document.getElementById('botaoavancar').disabled = true;
+    }
+    if (dados.PaginaAtual <= 1) {
+        if (!document.getElementById('botaovoltar').disabled)
+            document.getElementById('botaovoltar').disabled = true;
+    }
 }
