@@ -2,7 +2,7 @@
 <%
 Response.CodePage = 65001
 Response.CharSet = "UTF-8"
-Response.ContentType = "application/json"
+'Response.ContentType = "application/json"
 
 if (Request("fnTarget") <> "") then
     intLimit = Request("RegistrosPorPagina")
@@ -44,9 +44,9 @@ function BuscarTarefasPaginadas()
     Do While (not recordSet.EOF)
         response.Write  "{"
             response.Write      """tarID"": """ & recordSet("tarID") & """"
-            response.Write      ",""Título"": """ & recordSet("tarTitulo") & """"
-            response.Write      ",""Descrição"": """ & recordSet("tarDescricao") & """"
-            response.Write      ",""Data Abertura"": """ & recordSet("tarData") & """"
+            response.Write      ",""Titulo"": """ & recordSet("tarTitulo") & """"
+            response.Write      ",""Descricao"": """ & recordSet("tarDescricao") & """"
+            response.Write      ",""DataAbertura"": """ & recordSet("tarData") & """"
             response.Write      ",""Status"": """ & recordSet("tarStatus") & """"
         response.Write  "}"
         if recordSet.AbsolutePosition < recordSet.RecordCount then

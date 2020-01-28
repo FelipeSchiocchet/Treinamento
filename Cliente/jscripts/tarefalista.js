@@ -17,6 +17,10 @@ function BuscarTarefas(fnTarget, RegistrosPorPagina, PaginaPesquisa) {
         type: 'POST',
         data: dadosPesquisa,
         success: function (data) {
+            debugger;
+            if(typeof data =='string'){
+                data = JSON.parse(data);
+            }
             PreencheTabela(data);
             AdicionarEventos(data);
         },
@@ -209,7 +213,7 @@ function TabelaCriarRodape(tabela, dados) {
 function mudarImagem(e) {
     debugger;
     var objImagem = e.currentTarget;
-    if (objImagem.src.indexOf("0") > -1) {         
+    if (objImagem.src.indexOf("0") > -1) {
         objImagem.src = "./imagens/7.gif";
         status = 7;
     }
@@ -234,8 +238,8 @@ function mudarImagem(e) {
             "id": objImagem.id
         },
         success: function (status) {
-            if (objImagem.src.indexOf("1") > -1) {      
-            alert('Tarefa não iniciada')    
+            if (objImagem.src.indexOf("1") > -1) {
+                alert('Tarefa não iniciada')
             }
             else if (objImagem.src.indexOf("0") > -1) {
                 alert('Tarefa em andamento')
