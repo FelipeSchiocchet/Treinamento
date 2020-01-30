@@ -34,7 +34,7 @@ function AdicionarEventos(tarID) {
     });
 
     $btnNovo.addEventListener("click", function (e) {
-        limparTarefa(e);
+        window.location.href = "tarefacadastro.asp";
     });
 
 }
@@ -189,26 +189,6 @@ function deletarTarefa(event, tarID) {
             if (retorno.sucesso == 'true') {
                 mostraAlerta("Tarefa deletada com sucesso")
                 window.location.href = "lista.asp";
-            }
-        },
-        error: function (obj, err) {
-            mostraAlerta("Servidor com erro, por favor usar mais tarde. " + err)
-        }
-    });
-}
-
-function limparTarefa(e, tarID) {
-    event.preventDefault();
-
-    $.ajax({
-        type: "POST",
-        url: "../Servidor/ajax/TarefaCadastroAjax.asp",
-        data: {
-            fnTarget: "limparTarefa"
-        },
-        success: function (retorno) {
-            if (retorno.sucesso == 'true') {
-                window.location.href = "tarefacadastro.asp";
             }
         },
         error: function (obj, err) {

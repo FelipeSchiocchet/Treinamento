@@ -115,11 +115,4 @@ function deletarTarefa()
 
 end function
 
-function limparTarefa()
-    
-    response.Write  "{"
-    response.Write      """sucesso"":""true"""
-    response.Write  "}"
-
-end function
 %>

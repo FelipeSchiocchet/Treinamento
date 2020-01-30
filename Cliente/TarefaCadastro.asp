@@ -29,7 +29,7 @@
             <button class="botao" id="cadastrar" value="Cadastrar"><b>Cadastrar</b></button>
             <button class="botao" id="alterar" value="Alterar"><b>Alterar</b></button>
             <button class="botao" id="deletar" value="Deletar"><b>Deletar</b></button>
-            <button class="botao" id="novo" value="Novo"><b>Novo</b></button>
+            <button type="button"  class="botao" id="novo" value="Novo"><b>Novo</b></button>
         </form>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script type="text/javascript" src="jscripts/tarefacadastro.js"></script>

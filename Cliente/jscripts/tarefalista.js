@@ -129,6 +129,12 @@ function TabelaCriarCorpo(tabela, dadosCorpo) {
                 cell.appendChild(a);
                 continue;
             }
+            if (key == 'Titulo') {
+                cell.id = element['tarID'];
+                cell.addEventListener("dblclick", function (e){
+                   editarTitulo(e);
+            });
+            } 
             if (key == 'Status') {
                 var imagem = document.createElement("img");
                 imagem.src = "./imagens/" + element[key] + ".gif";
@@ -263,38 +269,43 @@ function mudarImagem(e) {
 //     }
 // }
 
-function edicaoTarefa(tableData, tarID) {
-    var titulo = tableData.textContent;
-    tableData.textContent = "";
+function editarTitulo(e) {
+    var titulo = e.currentTarget.innerText;
     var input = document.createElement("input");
     input.value = titulo;
+    input.id = e.currentTarget.getAttribute('id');
+    e.currentTarget.innerText = "";
 
     input.addEventListener('keydown', function (e) {
-debugger
         if (e.keyCode == 13) {
-
-            salvaTarefa(input.value, tarID);
+            debugger;
+            salvaTarefa(input.value, input.id);
         }
         if (e.keyCode == 27) {
-            e.target.parentElement.innerHTML = titulo;
+            debugger;
+            e.currentTarget.parentElement.innerText = titulo;
+            var remove = e.currentTarget;
+            remove.remove();            
         }
     });
     input.addEventListener('blur', function (e) {
-        debugger
-        e.target.parentElement.innerHTML = titulo;
+        debugger;
+        e.currentTarget.parentElement.innerText = titulo;
+        var remove = e.currentTarget;
+        remove.remove();      
     });
 
-    tableData.appendChild(input);
+    e.currentTarget.appendChild(input);
  }   
 
-function salvaTarefa(txt, tarID) {
+function salvaTarefa(txt, id) {
 
     return $.ajax({
         url: "update.asp",
         type: 'POST',
         data: {
             "titulo": txt,
-            "id": tarID
+            "id": id
         },
         success: function (titulo) {
             location.reload();
