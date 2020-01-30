@@ -1,5 +1,4 @@
-<!-- #include file = "../configs/config.asp" -->
-<!-- #include file = "../class/validacao.asp" -->
+<!-- #include file = "./Models/Conexao.class.asp" -->
 <%  
 Response.CodePage = 65001
 Response.CharSet = "UTF-8"
@@ -13,39 +12,29 @@ dim usuario, senha, nome, endereco, cidade, cep, estadoid, geradorID
 dim recordSet
 dim rs
 dim records
-dim usuid
+dim usuid : usuid = CInt(request("usuid")) 
 dim usuNome
-        
-function buscarEstados
-    sqlEst = "SELECT * FROM [treinamento].[dbo].[estado]"
-    Set recordSet=Server.CreateObject("ADODB.recordset")
-    recordSet.Open sqlEst, cn,&H0001
-
-    response.Write "{"
-    response.Write """Estados"":["
-
-    Do While (not recordSet.EOF)
-        response.Write  "{"
-        response.Write      """estadoid"": " & recordSet("estadoid")
-        response.Write      ",""nome"": """ & recordSet("nome") & """"
-        response.Write  "}"
-        if recordSet.AbsolutePosition < recordSet.RecordCount then
-            response.Write ","
-        end if   
-        recordSet.MoveNext
-    loop  
-    
-    response.Write "]"
-    response.Write "}"
-    recordSet.Close
-end function
 
 function colocarDados    
-    usuid = CInt(request("usuid")) 
+    
 
     if usuid <> "" then        
-        set rs = cn.execute("select * from usuario where usuid = "& usuid )     
+    set objconexao = new Conexao
+    set cn = objconexao.AbreConexao()
+    set objusuario = new cUsuario
+    set rs = objusuario.BuscarUsuarioPorId(cn, usuid)
+     
         if not rs.eof then
+        response.Write  "{"   
+    response.Write      """usuario"": """ & usuario & """"
+    response.Write      ",""senha"": """ & senha & """"
+    response.Write      ",""nome"": """ & nome & """"
+    response.Write      ",""endereco"": """ & endereco & """"
+    response.Write      ",""cidade"": """ & cidade & """"
+    response.Write      ",""cep"": """ & cep & """"
+    response.Write      ",""estadoid"": " & estadoid & ""
+    response.Write      ",""geradorID"": " & geradorID & ""
+    response.Write  "}"
             usuario = rs("usuario")
             senha = rs("senha")
             nome = rs("nome")
@@ -61,16 +50,7 @@ function colocarDados
     else
         geradorID = records("geradorID")
     end if
-    response.Write  "{"   
-    response.Write      """usuario"": """ & usuario & """"
-    response.Write      ",""senha"": """ & senha & """"
-    response.Write      ",""nome"": """ & nome & """"
-    response.Write      ",""endereco"": """ & endereco & """"
-    response.Write      ",""cidade"": """ & cidade & """"
-    response.Write      ",""cep"": """ & cep & """"
-    response.Write      ",""estadoid"": " & estadoid & ""
-    response.Write      ",""geradorID"": " & geradorID & ""
-    response.Write  "}"
+    
 end function
 
 function cadastrarUsuario()
@@ -132,4 +112,33 @@ function limparCampos()
     response.Write  "}"
 
 end function
+
+function validaNome(usuario,senha,nome,endereco,cidade,cep,estadoid) 
+
+      dim resultado: resultado = true    
+     
+        if usuario = "" then 
+           resultado = false 
+        end if
+        if senha = "" then 
+           resultado = false 
+        end if
+        if nome = "" then 
+           resultado = false 
+        end if
+        if endereco = "" then 
+           resultado = false 
+        end if
+        if cidade = "" then 
+           resultado = false 
+        end if
+        if cep = "" then 
+           resultado = false 
+        end if
+        if estadoid = "" then 
+           resultado = false 
+        end if
+
+       validaNome = resultado
+    end function 
 %>
