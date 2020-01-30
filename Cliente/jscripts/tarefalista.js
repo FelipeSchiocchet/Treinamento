@@ -17,7 +17,6 @@ function BuscarTarefas(fnTarget, RegistrosPorPagina, PaginaPesquisa) {
         type: 'POST',
         data: dadosPesquisa,
         success: function (data) {
-            debugger;
             if(typeof data =='string'){
                 data = JSON.parse(data);
             }
@@ -131,7 +130,6 @@ function TabelaCriarCorpo(tabela, dadosCorpo) {
                 continue;
             }
             if (key == 'Status') {
-
                 var imagem = document.createElement("img");
                 imagem.src = "./imagens/" + element[key] + ".gif";
                 imagem.id = element['tarID'];
@@ -151,7 +149,7 @@ function TabelaCriarRodape(tabela, dados) {
     var tfoot = tabela.createTFoot();//<tfoot></tfoot>
     var row = tfoot.insertRow(0);//<tr></tr>
     var cell2 = row.insertCell(0);//<th></th>
-    cell2.colSpan = 2;
+    cell2.colSpan = 1;
     var cell = row.insertCell(0);//<th></th>
     cell.colSpan = 4;
     var div = document.createElement("div");//<div></div>
@@ -211,7 +209,6 @@ function TabelaCriarRodape(tabela, dados) {
 }
 
 function mudarImagem(e) {
-    debugger;
     var objImagem = e.currentTarget;
     if (objImagem.src.indexOf("0") > -1) {
         objImagem.src = "./imagens/7.gif";
@@ -266,44 +263,44 @@ function mudarImagem(e) {
 //     }
 // }
 
-// function edicaoTarefa(tableData, tarID) {
-//     var titulo = tableData.textContent;
-//     tableData.textContent = "";
-//     var input = document.createElement("input");
-//     input.value = titulo;
+function edicaoTarefa(tableData, tarID) {
+    var titulo = tableData.textContent;
+    tableData.textContent = "";
+    var input = document.createElement("input");
+    input.value = titulo;
 
-//     input.addEventListener('keydown', function (e) {
-// debugger
-//         if (e.keyCode == 13) {
+    input.addEventListener('keydown', function (e) {
+debugger
+        if (e.keyCode == 13) {
 
-//             salvaTarefa(input.value, tarID);
-//         }
-//         if (e.keyCode == 27) {
-//             e.target.parentElement.innerHTML = titulo;
-//         }
-//     });
-//     input.addEventListener('blur', function (e) {
-//         debugger
-//         e.target.parentElement.innerHTML = titulo;
-//     });
+            salvaTarefa(input.value, tarID);
+        }
+        if (e.keyCode == 27) {
+            e.target.parentElement.innerHTML = titulo;
+        }
+    });
+    input.addEventListener('blur', function (e) {
+        debugger
+        e.target.parentElement.innerHTML = titulo;
+    });
 
-//     tableData.appendChild(input);
-//  }   
+    tableData.appendChild(input);
+ }   
 
-// function salvaTarefa(txt, tarID) {
+function salvaTarefa(txt, tarID) {
 
-//     return $.ajax({
-//         url: "update.asp",
-//         type: 'POST',
-//         data: {
-//             "titulo": txt,
-//             "id": tarID
-//         },
-//         success: function (titulo) {
-//             location.reload();
-//         },
-//         error: function (xhr, titulo, error) {
-//             alert("Erro: " + error.Message);
-//         }
-//     });
-// }
+    return $.ajax({
+        url: "update.asp",
+        type: 'POST',
+        data: {
+            "titulo": txt,
+            "id": tarID
+        },
+        success: function (titulo) {
+            location.reload();
+        },
+        error: function (xhr, titulo, error) {
+            alert("Erro: " + error.Message);
+        }
+    });
+}

@@ -97,7 +97,7 @@ function cadastrarUsuario(event) {
             },
             success: function (retorno) {
                 if (retorno.sucesso == 'true') {
-                    mostraAlerta("Usu�rio cadastrado com sucesso");
+                    mostraAlerta("Usuário cadastrado com sucesso");
                     location.href = "usuariocadastro.asp?usuid=" + retorno.UsuID;
                 }
             }

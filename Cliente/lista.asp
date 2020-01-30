@@ -10,7 +10,7 @@
 
 <body>
     <h1 class="u">Tarefas</h1>
-    <p><a href="http://localhost/treinamento/Cliente/TarefaCadastro.asp">Nova Tarefa</a></p>
+    <p><a href="http://localhost/treinamento/Cliente/tarefacadastro.asp">Nova Tarefa</a></p>
     <table id="tblTarefas"></table>
     <script type="text/javascript" src="jscripts/jquery.js"></script>
     <script type="text/javascript" src="jscripts/tarefalista.js"></script>

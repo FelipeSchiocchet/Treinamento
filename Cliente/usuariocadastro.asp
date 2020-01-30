@@ -1,22 +1,23 @@
 <!DOCTYPE html>
 <html class="font">
     <head>
-        <title>Cadastro de Usu·rio</title>
+        <title>Cadastro de Usu√°rio</title>
         <link rel="stylesheet" type="text/css" href="css/style.css">
         <script type="text/javascript" src="jscripts/usuariocadastro.js"></script>
+        <meta charset="utf-8">
     </head>
     <body>
-        <h1 class="u">Usu·rio</h1>
+        <h1 class="u">Usu√°rio</h1>
         <p><a href="http://localhost/treinamento/Cliente/listausuario.asp">Voltar para a listagem</a></p>           
         <form method="post">
             <input type="hidden" id="geradorID" name="geradorID">
-            Usu·rio:
-            <input type="text"  name="usuario" id="usuario" class="usuarioC">
+            Usu√°rio:
+            <input type="text" name="usuario" id="usuario" class="usuarioC">
             Senha:
             <input type="password" name="senha" id="senha" class="senhaC"><br>
             Nome:
             <input type="text" name="nome" id="nome" class="nome"><br>
-            EndereÁo:
+            Endere√ßo:
             <input type="text" name="endereco" id="endereco" class="endereco">
             Cidade:
             <input type="text" name="cidade" id="cidade" class="cidade"><br>
