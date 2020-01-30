@@ -237,6 +237,26 @@ function deletarUsuario(event) {
     });
 }
 
+function limparCampos(e) {
+    event.preventDefault();
+
+    $.ajax({
+        type: "POST",
+        url: "../Servidor/ajax/usuariocadastroAjax.asp",
+        data: {
+            fnTarget: "limparCampos"
+        },
+        success: function (retorno) {
+            if (retorno.sucesso == 'true') {
+                window.location.href = "usuariocadastro.asp";
+            }
+        },
+        error: function (obj, err) {
+            mostraAlerta("Servidor com erro, por favor usar mais tarde. " + err)
+        }
+    });
+}
+
 function mostraAlerta(mensagem) {
     alert(mensagem);
 }

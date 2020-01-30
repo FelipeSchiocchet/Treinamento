@@ -105,10 +105,18 @@ function alterarTarefa()
     response.Write  "}"
 end function
 
-function deletarTArefa()
+function deletarTarefa()
     
     tarID = CInt(request("tarID"))
     cn.execute("delete from tarefa where tarID ="& tarID )  
+    response.Write  "{"
+    response.Write      """sucesso"":""true"""
+    response.Write  "}"
+
+end function
+
+function limparTarefa()
+    
     response.Write  "{"
     response.Write      """sucesso"":""true"""
     response.Write  "}"

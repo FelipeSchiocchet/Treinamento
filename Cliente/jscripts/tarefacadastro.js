@@ -30,16 +30,17 @@ function AdicionarEventos(tarID) {
     });
 
     $btnDeletar.addEventListener("click", function (e) {
-        deletarTarefa(e,tarID);
+        deletarTarefa(e, tarID);
     });
 
     $btnNovo.addEventListener("click", function (e) {
+        limparTarefa(e);
     });
 
 }
 
 function prencherdados(tarID) {
-   return $.ajax({
+    return $.ajax({
         type: "POST",
         url: "../Servidor/ajax/TarefaCadastroAjax.asp",
         data: {
@@ -56,10 +57,10 @@ function prencherdados(tarID) {
                 var geradorID = data.geradorID;
                 buscaUsuarios(document.getElementById("geradorID"), geradorID);
             }
-       },
+        },
         error: function (obj, err) {
-           mostraAlerta("Servidor com erro, por favor usar mais tarde. " + err)
-       }
+            mostraAlerta("Servidor com erro, por favor usar mais tarde. " + err)
+        }
     })
 }
 
@@ -97,7 +98,7 @@ function buscaUsuarios(idElemento, geradorID) {
         type: 'GET',
         contentType: 'application/json',
         data: {
-            fnTarget: "buscarUsuarios" 
+            fnTarget: "buscarUsuarios"
         },
         success: function (data) {
             preencheOptions(idElemento, data, geradorID);
@@ -146,7 +147,7 @@ function validarDados() {
     return true;
 }
 
-function alterarTarefa(event,tarID) {
+function alterarTarefa(event, tarID) {
     event.preventDefault();
     var data = {
         fnTarget: "alterarTarefa",
@@ -163,7 +164,7 @@ function alterarTarefa(event,tarID) {
             url: "../Servidor/ajax/TarefaCadastroAjax.asp",
             data: data,
             success: function (retorno) {
-                if (retorno.sucesso == 'true')  {
+                if (retorno.sucesso == 'true') {
                     mostraAlerta("Tarefa alterada com sucesso")
                 }
             },
@@ -174,9 +175,9 @@ function alterarTarefa(event,tarID) {
     }
 }
 
-function deletarTarefa(event,tarID) {
+function deletarTarefa(event, tarID) {
     event.preventDefault();
-    
+
     $.ajax({
         type: "POST",
         url: "../Servidor/ajax/TarefaCadastroAjax.asp",
@@ -185,9 +186,29 @@ function deletarTarefa(event,tarID) {
             tarID: tarID
         },
         success: function (retorno) {
-          if (retorno.sucesso == 'true') {
+            if (retorno.sucesso == 'true') {
                 mostraAlerta("Tarefa deletada com sucesso")
                 window.location.href = "lista.asp";
+            }
+        },
+        error: function (obj, err) {
+            mostraAlerta("Servidor com erro, por favor usar mais tarde. " + err)
+        }
+    });
+}
+
+function limparTarefa(e, tarID) {
+    event.preventDefault();
+
+    $.ajax({
+        type: "POST",
+        url: "../Servidor/ajax/TarefaCadastroAjax.asp",
+        data: {
+            fnTarget: "limparTarefa"
+        },
+        success: function (retorno) {
+            if (retorno.sucesso == 'true') {
+                window.location.href = "tarefacadastro.asp";
             }
         },
         error: function (obj, err) {

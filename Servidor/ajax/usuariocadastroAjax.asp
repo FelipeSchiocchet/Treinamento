@@ -124,4 +124,12 @@ function deletarUsuario()
     response.Write  "}"
 
 end function
+
+function limparCampos()
+    
+    response.Write  "{"
+    response.Write      """sucesso"":""true"""
+    response.Write  "}"
+
+end function
 %>

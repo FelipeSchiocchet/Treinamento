@@ -26,10 +26,10 @@
             Data:
             <input type="datetime-local" name="tarData" id="tarData" class="data" min="1900-01-01T00:00:00" max="2100-12-31T23:59:59"><br>
 
-           <button class="botao" id="cadastrar" value="Cadastrar"><b>Cadastrar</b></button>
+            <button class="botao" id="cadastrar" value="Cadastrar"><b>Cadastrar</b></button>
             <button class="botao" id="alterar" value="Alterar"><b>Alterar</b></button>
             <button class="botao" id="deletar" value="Deletar"><b>Deletar</b></button>
-            <button class="botao" id="novo" value="Novo" onclick="window.location.href = 'http://localhost/treinamento/Cliente/tarefacadastro.asp'"><b>Novo</b></button>
+            <button class="botao" id="novo" value="Novo"><b>Novo</b></button>
         </form>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script type="text/javascript" src="jscripts/tarefacadastro.js"></script>
