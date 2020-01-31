@@ -11,7 +11,7 @@ window.addEventListener('load', function () {
         prencherdados(usuid);
     } else {
         var estadoid = 1;
-        buscaEstados(document.getElementById("estadoid"), estadoid);
+        BuscaEstados(document.getElementById("estadoid"), estadoid);
     }
 });
 
@@ -51,7 +51,7 @@ function mascara(t, mask) {
 function prencherdados(usuid) {
    return $.ajax({
         type: "POST",
-        url: "../Servidor/ajax/usuariocadastroAjax.asp",
+        url: "../Servidor/Controllers/usuario.asp",
         async: false,
         data: {
             fnTarget: "colocarDados",
@@ -68,7 +68,7 @@ function prencherdados(usuid) {
                 document.getElementById("estadoid").options.selectedIndex = data.estadoid;
                 document.getElementById("geradorID").value = data.geradorID;
                 var estadoid = data.estadoid;
-                buscaEstados(document.getElementById("estadoid"), estadoid);
+                BuscaEstados(document.getElementById("estadoid"), estadoid);
             }
        },
         error: function (obj, err) {
@@ -82,7 +82,7 @@ function cadastrarUsuario(event) {
     if (validarDados()) {
         $.ajax({
             type: "POST",
-            url: "../Servidor/ajax/usuariocadastroAjax.asp",
+            url: "../Servidor/Controllers/usuario.asp",
             async: false,
             data: {
                 fnTarget: "cadastrarUsuario",
@@ -106,18 +106,19 @@ function cadastrarUsuario(event) {
     }
 }
 
-function buscaEstados(idElemento, estadoid) {
+function BuscaEstados(idElemento, estadoid) {
     if (!idElemento) {
         return false;
     }
     return $.ajax({
-        url: "../Servidor/ajax/usuariocadastroAjax.asp",
+        url: "../Servidor/Controllers/estado.asp",
         type: 'GET',
         contentType: 'application/json',
         data: {
             fnTarget: "buscarEstados" 
         },
         success: function (data) {
+            debugger;
             preencheOptions(idElemento, data, estadoid);
         },
         error: function (obj, err) {
@@ -193,12 +194,12 @@ function alterarUsuario(event) {
     if (ddd) {
         $.ajax({
             type: "POST",
-            url: "../Servidor/ajax/usuariocadastroAjax.asp",
+            url: "../Servidor/Controllers/usuario.asp",
             async: false,
             data: data,
             success: function (retorno) {
                 if (retorno.sucesso == 'true')  {
-                    mostraAlerta("Usu�rio alterado com sucesso")
+                    mostraAlerta("Usuário alterado com sucesso")
                 }
             },
             error: function (obj, err) {
@@ -214,12 +215,12 @@ function deletarUsuario(event) {
     const urlParams = new URLSearchParams(queryString);
     var usuid = urlParams.get("usuid");
     if (usuid == geradorID.value) {
-        mostraAlerta("Usu�rios geradores de tarefas n�o podem ser deletados");
+        mostraAlerta("Usuários geradores de tarefas n�o podem ser deletados");
         return false;
     }
     $.ajax({
         type: "POST",
-        url: "../Servidor/ajax/usuariocadastroAjax.asp",
+        url: "../Servidor/Controllers/usuario.asp",
         async: false,
         data: {
             fnTarget: "deletarUsuario",
@@ -227,7 +228,7 @@ function deletarUsuario(event) {
         },
         success: function (retorno) {
           if (retorno.sucesso == 'true') {
-                mostraAlerta("Usu�rio deletado com sucesso")
+                mostraAlerta("Usuário deletado com sucesso")
                 window.location.href = "listausuario.asp";
             }
         },
@@ -242,7 +243,7 @@ function limparCampos(e) {
 
     $.ajax({
         type: "POST",
-        url: "../Servidor/ajax/usuariocadastroAjax.asp",
+        url: "../Servidor/Controllers/usuario.asp",
         data: {
             fnTarget: "limparCampos"
         },

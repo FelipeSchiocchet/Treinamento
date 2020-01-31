@@ -1,5 +1,5 @@
-<!-- #include file = "./Models/Conexao.class.asp" -->
-<!-- #include file = "./Models/Estado.class.asp" -->
+<!-- #include file = "../Models/Conexao.class.asp" -->
+<!-- #include file = "../Models/Estado.class.asp" -->
 <% 
 Response.CodePage = 65001
 Response.CharSet = "UTF-8"
@@ -9,7 +9,7 @@ if (Request("fnTarget") <> "") then
     Execute(Request("fnTarget") & "()")
 end if
 
-function buscarEstados
+function BuscarEstados
     set objconexao = new Conexao
     set cn = objconexao.AbreConexao()
     set objestado = new Estado

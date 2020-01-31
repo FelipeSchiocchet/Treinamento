@@ -3,7 +3,7 @@ Class Conexao
     '
     ' Propriedades da classe
     '
-    
+
     Private DataSource
     Private DataBase
     Private Usuario
@@ -45,25 +45,15 @@ Class Conexao
     End sub	
 
     '
-    ' M�todos complementares  
+    ' Métodos complementares  
     '
   
     'Abre uma conexao
     public function AbreConexao()
-        '
-        ' TODO L�gica de abertura de uma conex�o
-        ' precisa ter uma forma de pegar os dados da conex�o de um arquivo de configura��o
-        ' quer seja um arquivo de vari�veis de ambiente, ou um web.config
-        ' precisa ter os seguintes valores no arquivo ou variavel de ambiente:
-        '   - Datasource
-        '   - DataBase
-        '   - Usuario
-        '   - Senha 
-        '
-        dim DataSource : DataSource= "localhost"
+        dim DataSource : DataSource= "ES203"
         dim DataBase : DataBase = "treinamento"
         dim Usuario : Usuario = "sa"
-        dim Senha : Senha = "123456"
+        dim Senha : Senha = "Ss123456"
         dim stringConexao : stringConexao = "Data Source=" & Datasource & ";Initial Catalog=" & DataBase & ";User Id=" & Usuario & ";Password=" & Senha
         Set cn = Server.CreateObject("ADODB.Connection")
         cn.Provider = "sqloledb"

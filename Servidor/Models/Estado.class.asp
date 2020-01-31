@@ -1,6 +1,7 @@
 <%
 Class Estado
     
+    '
     ' Propriedades da classe
     '
     Private Id

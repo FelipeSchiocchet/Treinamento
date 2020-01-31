@@ -1,4 +1,5 @@
-<!-- #include file = "./Models/Conexao.class.asp" -->
+<!-- #include file = "../Models/Conexao.class.asp" -->
+<!-- #include file = "../Models/Usuario.class.asp" -->
 <%  
 Response.CodePage = 65001
 Response.CharSet = "UTF-8"
@@ -17,40 +18,34 @@ dim usuNome
 
 function colocarDados    
     
-
     if usuid <> "" then        
     set objconexao = new Conexao
     set cn = objconexao.AbreConexao()
     set objusuario = new cUsuario
-    set rs = objusuario.BuscarUsuarioPorId(cn, usuid)
-     
-        if not rs.eof then
-        response.Write  "{"   
-    response.Write      """usuario"": """ & usuario & """"
-    response.Write      ",""senha"": """ & senha & """"
-    response.Write      ",""nome"": """ & nome & """"
-    response.Write      ",""endereco"": """ & endereco & """"
-    response.Write      ",""cidade"": """ & cidade & """"
-    response.Write      ",""cep"": """ & cep & """"
-    response.Write      ",""estadoid"": " & estadoid & ""
-    response.Write      ",""geradorID"": " & geradorID & ""
-    response.Write  "}"
-            usuario = rs("usuario")
-            senha = rs("senha")
-            nome = rs("nome")
-            endereco = rs("endereco")
-            cidade = rs("cidade")
-            cep = rs("cep")
-            estadoid = rs("estadoid")
-        end if
-    end if
+    set rs = objusuario.BuscarUsuarioPorId(cn, usuId)
     set records = cn.execute("select * from tarefa where geradorID ="& usuid) 
     if records.eof then
         geradorID = 0
     else
         geradorID = records("geradorID")
     end if
-    
+    records.Close
+     
+        if not rs.eof then
+        response.Write  "{"   
+    response.Write      """usuario"": """ & rs("usuario") & """"
+    response.Write      ",""senha"": """ & rs("senha") & """"
+    response.Write      ",""nome"": """ & rs("nome") & """"
+    response.Write      ",""endereco"": """ & rs("endereco") & """"
+    response.Write      ",""cidade"": """ & rs("cidade") & """"
+    response.Write      ",""cep"": """ & rs("cep") & """"
+    response.Write      ",""estadoid"": " & rs("estadoid") & ""
+    response.Write      ",""geradorID"": " & geradorID & ""
+    response.Write  "}"
+        end if
+    end if
+    rs.Close
+    objconexao.Fecharconexao(cn)
 end function
 
 function cadastrarUsuario()
