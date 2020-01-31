@@ -61,11 +61,7 @@ Class Conexao
 		set AbreConexao = cn
 	end function
 
-    'Fecha uma conex�o
     public function FecharConexao(cn)
-        '
-        ' TODO L�gica para fechamento de uma conex�o
-        '
         cn.Close()
 	end function
 End Class%>

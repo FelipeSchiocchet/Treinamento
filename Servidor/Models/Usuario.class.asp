@@ -89,8 +89,8 @@ Class cUsuario
         sql=sql & "'" & ObjUsuario.getIdEstado() & "');SELECT SCOPE_IDENTITY() As usuid"
         on error resume next
         set rs = cn.Execute(sql)
-         usid = rs("usuid")
-        set InsercaoUsuario =0
+         usuid = rs("usuid")
+        set InsercaoUsuario = usuid
       
 	end function
 

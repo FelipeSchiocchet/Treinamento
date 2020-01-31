@@ -1,6 +1,7 @@
 <!-- #include file = "../Models/Conexao.class.asp" -->
 <!-- #include file = "../Models/Usuario.class.asp" -->
 <%  
+stop
 Response.CodePage = 65001
 Response.CharSet = "UTF-8"
 Response.ContentType = "application/json"
@@ -13,11 +14,11 @@ dim usuario, senha, nome, endereco, cidade, cep, estadoid, geradorID
 dim recordSet
 dim rs
 dim records
-dim usuid : usuid = CInt(request("usuid")) 
+dim usuid
 dim usuNome
 
 function colocarDados    
-    
+    usuid = CInt(request("usuid"))
     if usuid <> "" then        
     set objconexao = new Conexao
     set cn = objconexao.AbreConexao()
@@ -49,20 +50,23 @@ function colocarDados
 end function
 
 function cadastrarUsuario()
-    usuario = cstr("" & Replace(request.form("usuario"),"'","''"))
-    senha = cstr("" & Replace(request.form("senha"),"'","''"))
-    nome = cstr("" & Replace(request.form("nome"),"'","''"))
-    endereco = cstr("" & Replace(request.form("endereco"),"'","''"))
-    cidade = cstr("" & Replace(request.form("cidade"),"'","''"))
-    cep = cstr("" & Replace(request.form("cep"),"'","''"))
-    estadoid = cstr("" & Replace(request.form("estadoid"),"'","''"))
-
+stop
+    set objconexao = new Conexao
+    set cn = objconexao.AbreConexao()
+    set objUsuario = new cUsuario
+    ObjUsuario.setUsuario(Request("usuario"))
+    ObjUsuario.setSenha(Request("senha"))
+    ObjUsuario.setNome(Request("nome"))
+    ObjUsuario.setEndereco(Request("endereco"))
+    ObjUsuario.setCidade(Request("cidade"))
+    ObjUsuario.setCep(Request("cep"))
+    ObjUsuario.setIdEstado(Request("estadoid"))
     if validaNome(usuario,senha,nome,endereco,cidade,cep,estadoid) then
-        cn.execute("insert into usuario (usuario, senha, nome, endereco, cidade, cep, estadoid) VALUES ('"& usuario &"', '"& senha &"', '"& nome &"', '"& endereco &"', '"& cidade &"' ,'"& cep &"', '"& estadoid &"'); ")
-        set rs = cn.execute("select TOP 1 usuid FROM usuario ORDER BY usuid DESC")     
+        set rs = objusuario.InsercaoUsuario(cn, objUsuario)     
         if not rs.eof then
             usuid = cint(rs("UsuID"))
         end if
+        rs.Close
     end if
 
     response.Write  "{"
@@ -70,6 +74,7 @@ function cadastrarUsuario()
     response.Write      ",""UsuID"": " & usuid 
     response.Write  "}"
 
+    objconexao.Fecharconexao(cn)
 end function
 
 function alterarUsuario()
