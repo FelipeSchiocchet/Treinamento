@@ -2,7 +2,7 @@
 <%
 Response.CodePage = 65001
 Response.CharSet = "UTF-8"
-'Response.ContentType = "application/json"
+Response.ContentType = "application/json"
 
 if (Request("fnTarget") <> "") then
     intLimit = Request("RegistrosPorPagina")

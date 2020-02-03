@@ -18,7 +18,7 @@ function validarLogon() {
     }
 
     $.ajax({
-        url: "../Servidor/ajax/logonAjax.asp",
+        url: "../Servidor/Controllers/logonAjax.asp",
         type: "POST",
         async: false,
         data: {

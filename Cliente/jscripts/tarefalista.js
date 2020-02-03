@@ -13,7 +13,7 @@ function BuscarTarefas(fnTarget, RegistrosPorPagina, PaginaPesquisa) {
         "PaginaPesquisa": PaginaPesquisa,
     }
     return $.ajax({
-        url: "../Servidor/ajax/listaAjax.asp",
+        url: "../Servidor/Controllers/listaAjax.asp",
         type: 'POST',
         data: dadosPesquisa,
         success: function (data) {
@@ -260,14 +260,6 @@ function mudarImagem(e) {
         }
     });
 }
-
-// function myFunction(event) {
-
-//     if (event.keyCode === 13) {
-//         event.preventDefault();
-//         document.getElementById("input").submit();
-//     }
-// }
 
 function editarTitulo(e) {
     var titulo = e.currentTarget.innerText;

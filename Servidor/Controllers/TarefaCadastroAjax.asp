@@ -1,5 +1,4 @@
 <!-- #include file = "../configs/config.asp" -->
-<!-- #include file = "../class/validartarefa.asp" -->
 <%  
 Response.CodePage = 65001
 Response.CharSet = "UTF-8"
