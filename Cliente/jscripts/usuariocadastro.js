@@ -49,6 +49,7 @@ function mascara(t, mask) {
 }
 
 function prencherdados(usuid) {
+    
    return $.ajax({
         type: "POST",
         url: "../Servidor/Controllers/usuario.asp",
@@ -177,6 +178,7 @@ function alterarUsuario(event) {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     var usuid = urlParams.get("usuid");
+    debugger;
     var data = {
         fnTarget: "alterarUsuario",
         usuid: usuid,
@@ -186,8 +188,7 @@ function alterarUsuario(event) {
         endereco: document.getElementById("endereco").value,
         cidade: document.getElementById("cidade").value,
         cep: document.getElementById("cep").value,
-        estadoid: document.getElementById("estadoid").value,
-        geradorID: document.getElementById("geradorID").value
+        estadoid: document.getElementById("estadoid").value
     };
     if (validarDados()) {
         $.ajax({

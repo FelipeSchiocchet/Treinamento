@@ -59,7 +59,7 @@ Class cUsuario
     End sub
 
     Public function getCep()
-        getCep = Cidade
+        getCep = Cep
     End function
 
     Public sub setCep(byval p_cep)
@@ -130,16 +130,15 @@ Class cUsuario
     end function
 
     public function BuscarUsuarios(cn, palavraParaPesquisa)
-        sql = "SELECT [nome],[usuario],[endereco],[cidade],[cep],[usuid] FROM [treinamento].[dbo].[usuario]"
         sqlPesquisa = "SELECT [usuid],[nome],[usuario],[endereco],[cidade],[cep] "
         sqlPesquisa = sqlPesquisa & "FROM [treinamento].[dbo].[usuario] WHERE [usuario] LIKE '%"
         sqlPesquisa = sqlPesquisa & Replace(palavraParaPesquisa, "'", "''") & "%'"
-        Set rs=Server.CreateObject("ADODB.recordset")
-        rs.CursorLocation = 3 
+        Set rs = Server.CreateObject("ADODB.recordset")
+        rs.CursorLocation = 3
         rs.Open sqlPesquisa, cn, &H0001
 		set BuscarUsuarios = rs
 	end function
-
+    
     public function BuscarUsuarioPorNomeSenha(cn,usuario,senha)        
         sql = "SELECT * FROM [treinamento].[dbo].[usuario] where usuario='" & usuario & "' and senha='" & senha & "'" 
         Set rs=Server.CreateObject("ADODB.recordset")

@@ -13,10 +13,13 @@ function BuscarUsuarios(fnTarget, RegistrosPorPagina, PaginaPesquisa) {
         "PaginaPesquisa": PaginaPesquisa,
     }
     return $.ajax({
-        url: "../Servidor/ajax/listausuarioAjax.asp",
+        url: "../Servidor/Controllers/listaUsuario.asp",
         type: 'POST',
         data: dadosPesquisa,
         success: function (data) {
+            if (typeof data == "string") {
+                data = JSON.parse(data)
+            }
             PreencheTabela(data);
             AdicionarEventos(data);
         },
