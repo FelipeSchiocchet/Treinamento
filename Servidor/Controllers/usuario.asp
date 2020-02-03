@@ -1,7 +1,6 @@
 <!-- #include file = "../Models/Conexao.class.asp" -->
 <!-- #include file = "../Models/Usuario.class.asp" -->
 <%  
-stop
 Response.CodePage = 65001
 Response.CharSet = "UTF-8"
 Response.ContentType = "application/json"
@@ -22,8 +21,8 @@ function colocarDados
     if usuid <> "" then        
     set objconexao = new Conexao
     set cn = objconexao.AbreConexao()
-    set objusuario = new cUsuario
-    set rs = objusuario.BuscarUsuarioPorId(cn, usuId)
+    set objUsuario = new cUsuario
+    set rs = objUsuario.BuscarUsuarioPorId(cn, usuId)
     set records = cn.execute("select * from tarefa where geradorID ="& usuid) 
     if records.eof then
         geradorID = 0
@@ -50,24 +49,17 @@ function colocarDados
 end function
 
 function cadastrarUsuario()
-stop
     set objconexao = new Conexao
     set cn = objconexao.AbreConexao()
     set objUsuario = new cUsuario
-    ObjUsuario.setUsuario(Request("usuario"))
-    ObjUsuario.setSenha(Request("senha"))
-    ObjUsuario.setNome(Request("nome"))
-    ObjUsuario.setEndereco(Request("endereco"))
-    ObjUsuario.setCidade(Request("cidade"))
-    ObjUsuario.setCep(Request("cep"))
-    ObjUsuario.setIdEstado(Request("estadoid"))
-    if validaNome(usuario,senha,nome,endereco,cidade,cep,estadoid) then
-        set rs = objusuario.InsercaoUsuario(cn, objUsuario)     
-        if not rs.eof then
-            usuid = cint(rs("UsuID"))
-        end if
-        rs.Close
-    end if
+    ObjUsuario.setUsuario(request("usuario"))
+    ObjUsuario.setSenha(request("senha"))
+    ObjUsuario.setNome(request("nome"))
+    ObjUsuario.setEndereco(request("endereco"))
+    ObjUsuario.setCidade(request("cidade"))
+    ObjUsuario.setCep(request("cep"))
+    ObjUsuario.setIdEstado(request("estadoid"))
+    usuid = objUsuario.InsercaoUsuario(cn, objUsuario)     
 
     response.Write  "{"
     response.Write      """sucesso"":""true"""
@@ -78,27 +70,31 @@ stop
 end function
 
 function alterarUsuario()
-    usuid = CInt(request("usuid"))
-    usuario = cstr("" & Replace(request.form("usuario"),"'","''"))
-    senha = cstr("" & Replace(request.form("senha"),"'","''"))
-    nome = cstr("" & Replace(request.form("nome"),"'","''"))
-    endereco = cstr("" & Replace(request.form("endereco"),"'","''"))
-    cidade = cstr("" & Replace(request.form("cidade"),"'","''"))
-    cep = cstr("" & Replace(request.form("cep"),"'","''"))
-    estadoid = cstr("" & Replace(request.form("estadoid"),"'","''"))
-
-    if validaNome(usuario,senha,nome,endereco,cidade,cep,estadoid) then
-        cn.execute("update usuario SET usuario = '"& usuario &"', senha = '"& senha &"', nome = '"& nome &"', endereco = '"& endereco &"', cidade = '"& cidade &"', cep = '"& cep &"', estadoid = '"& estadoid &"' where usuid ="& usuid )
-    end if
+    set objconexao = new Conexao
+    set cn = objconexao.AbreConexao()
+    set objUsuario = new cUsuario
+    ObjUsuario.setId(CInt(request("usuid")))
+    ObjUsuario.setUsuario(request("usuario"))
+    ObjUsuario.setSenha(request("senha"))
+    ObjUsuario.setNome(request("nome"))
+    ObjUsuario.setEndereco(request("endereco"))
+    ObjUsuario.setCidade(request("cidade"))
+    ObjUsuario.setCep(request("cep"))
+    ObjUsuario.setIdEstado(request("estadoid"))
+    rs = ObjUsuario.UpdateUsuario(cn, ObjUsuario)  
+    
     response.Write  "{"
     response.Write      """sucesso"":""true"""
     response.Write  "}"
 end function
 
 function deletarUsuario()
-    
     usuid = CInt(request("usuid"))
-    cn.execute("delete from usuario where usuid ="& usuid )  
+    set objconexao = new Conexao
+    set cn = objconexao.AbreConexao()
+    set objUsuario = new cUsuario
+    ObjUsuario.setId(CInt(request("usuid")))
+    rs = ObjUsuario.ExcluirUsuario(cn, usuid)  
     response.Write  "{"
     response.Write      """sucesso"":""true"""
     response.Write  "}"
@@ -111,34 +107,5 @@ function limparCampos()
     response.Write      """sucesso"":""true"""
     response.Write  "}"
 
-end function
-
-function validaNome(usuario,senha,nome,endereco,cidade,cep,estadoid) 
-
-      dim resultado: resultado = true    
-     
-        if usuario = "" then 
-           resultado = false 
-        end if
-        if senha = "" then 
-           resultado = false 
-        end if
-        if nome = "" then 
-           resultado = false 
-        end if
-        if endereco = "" then 
-           resultado = false 
-        end if
-        if cidade = "" then 
-           resultado = false 
-        end if
-        if cep = "" then 
-           resultado = false 
-        end if
-        if estadoid = "" then 
-           resultado = false 
-        end if
-
-       validaNome = resultado
-    end function 
+end function 
 %>

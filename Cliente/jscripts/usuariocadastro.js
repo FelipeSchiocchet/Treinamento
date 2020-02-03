@@ -16,10 +16,10 @@ window.addEventListener('load', function () {
 });
 
 function AdicionarEventos(usuid) {
-    $btnCadastrar = document.getElementById("cadastrar");
-    $btnAlterar = document.getElementById("alterar");
-    $btnDeletar = document.getElementById("deletar");
-    $btnNovo = document.getElementById("novo");
+    var $btnCadastrar = document.getElementById("cadastrar");
+    var $btnAlterar = document.getElementById("alterar");
+    var $btnDeletar = document.getElementById("deletar");
+    var $btnNovo = document.getElementById("novo");
 
     $btnCadastrar.addEventListener("click", function (e) {
         cadastrarUsuario(e);
@@ -80,21 +80,21 @@ function prencherdados(usuid) {
 function cadastrarUsuario(event) {
     event.preventDefault();
     if (validarDados()) {
+        var dados = {
+            fnTarget: "cadastrarUsuario",
+            usuario: document.getElementById("usuario").value,
+            senha: document.getElementById("senha").value,
+            nome: document.getElementById("nome").value,
+            endereco: document.getElementById("endereco").value,
+            cidade: document.getElementById("cidade").value,
+            cep: document.getElementById("cep").value,
+            estadoid: document.getElementById("estadoid").value
+        };
         $.ajax({
             type: "POST",
             url: "../Servidor/Controllers/usuario.asp",
             async: false,
-            data: {
-                fnTarget: "cadastrarUsuario",
-                usuario: document.getElementById("usuario").value,
-                senha: document.getElementById("senha").value,
-                nome: document.getElementById("nome").value,
-                endereco: document.getElementById("endereco").value,
-                cidade: document.getElementById("cidade").value,
-                cep: document.getElementById("cep").value,
-                estadoid: document.getElementById("estadoid").value,
-                geradorID: document.getElementById("geradorID").value
-            },
+            data: dados,
             success: function (retorno) {
                 if (retorno.sucesso == 'true') {
                     mostraAlerta("Usuário cadastrado com sucesso");
@@ -118,7 +118,6 @@ function BuscaEstados(idElemento, estadoid) {
             fnTarget: "buscarEstados" 
         },
         success: function (data) {
-            debugger;
             preencheOptions(idElemento, data, estadoid);
         },
         error: function (obj, err) {
@@ -143,7 +142,7 @@ function preencheOptions(idElemento, data, estadoid) {
 
 function validarDados() {
     if (usuario.value == "") {
-        mostraAlerta("Preencha o campo usu�rio!");
+        mostraAlerta("Preencha o campo usuário!");
         return false;
     }
     else if (senha.value == "") {
@@ -155,7 +154,7 @@ function validarDados() {
         return false;
     }
     else if (endereco.value == "") {
-        mostraAlerta("Preencha o campo endere�o!");
+        mostraAlerta("Preencha o campo endereço!");
         return false;
     }
     else if (cidade.value == "") {
@@ -178,7 +177,6 @@ function alterarUsuario(event) {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     var usuid = urlParams.get("usuid");
-    var ddd = validarDados();
     var data = {
         fnTarget: "alterarUsuario",
         usuid: usuid,
@@ -191,7 +189,7 @@ function alterarUsuario(event) {
         estadoid: document.getElementById("estadoid").value,
         geradorID: document.getElementById("geradorID").value
     };
-    if (ddd) {
+    if (validarDados()) {
         $.ajax({
             type: "POST",
             url: "../Servidor/Controllers/usuario.asp",
@@ -213,9 +211,10 @@ function deletarUsuario(event) {
     event.preventDefault();
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
+    debugger;
     var usuid = urlParams.get("usuid");
     if (usuid == geradorID.value) {
-        mostraAlerta("Usuários geradores de tarefas n�o podem ser deletados");
+        mostraAlerta("Usuários geradores de tarefas não podem ser deletados");
         return false;
     }
     $.ajax({

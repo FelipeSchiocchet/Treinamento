@@ -66,8 +66,6 @@ Class cUsuario
         Cep = p_cep
     End sub
 
-
-
     Public function getIdEstado()
         getIdEstado = IdEstado
     End function
@@ -77,8 +75,6 @@ Class cUsuario
     End sub
 
     public function InsercaoUsuario(cn,ObjUsuario)
-
-        stop
         sql="INSERT INTO [dbo].[usuario] (usuario,senha,nome,endereco,cidade,cep,estadoid) VALUES ("
         sql=sql & "'" & ObjUsuario.getUsuario() & "',"
         sql=sql & "'" & ObjUsuario.getSenha() & "',"
@@ -86,18 +82,52 @@ Class cUsuario
         sql=sql & "'" & ObjUsuario.getEndereco() & "',"
         sql=sql & "'" & ObjUsuario.getCidade() & "',"
         sql=sql & "'" & ObjUsuario.getCep() & "',"
-        sql=sql & "'" & ObjUsuario.getIdEstado() & "');SELECT SCOPE_IDENTITY() As usuid"
+        sql=sql & "'" & ObjUsuario.getIdEstado() & "');"
         on error resume next
-        set rs = cn.Execute(sql)
-         usuid = rs("usuid")
-        set InsercaoUsuario = usuid
-      
+        cn.Execute(sql)
+        if err<> 0 then
+            InsercaoUsuario = err.Description
+        else
+            Set rs=Server.CreateObject("ADODB.recordset")
+            rs.Open "SELECT SCOPE_IDENTITY() As usuid;", cn
+            InsercaoUsuario = rs("usuid").value
+            rs.close()
+        end if
 	end function
 
-
-    public function UpadateUsuario(Id)
-		set UpadateUsuario = rs
+    public function UpdateUsuario(cn,ObjUsuario)
+        sql="UPDATE [dbo].[usuario] SET "
+        sql=sql & "usuario = '" & ObjUsuario.getUsuario() & "',"
+        sql=sql & "senha = '" & ObjUsuario.getSenha() & "',"
+        sql=sql & "nome = '" & ObjUsuario.getNome() & "',"
+        sql=sql & "endereco = '" & ObjUsuario.getEndereco() & "',"
+        sql=sql & "cidade = '" & ObjUsuario.getCidade() & "',"
+        sql=sql & "cep = '" & ObjUsuario.getCep() & "',"
+        sql=sql & "estadoid = '" & ObjUsuario.getIdEstado() & "'"
+        sql=sql & " WHERE usuid=" & ObjUsuario.getId() & ";"
+        on error resume next
+        cn.Execute(sql)
+        if err<>0 then
+            UpdateUsuario =  err.Description
+        else    
+            UpdateUsuario = Cint(ObjUsuario.getId())
+        end if
 	end function
+
+    public function ExcluirUsuario(cn,usuId)
+        if(usuid="") then
+            ExcluirUsuario = "Usuário não informado"
+        else
+            sql="DELETE FROM [dbo].[usuario] WHERE [usuid]='" & usuId & "'"
+            on error resume next
+            cn.Execute sql, recaffected
+            if err<>0 then
+                ExcluirUsuario =  err.Description
+            else    
+                ExcluirUsuario = recaffected
+            end if
+        end if
+    end function
 
     public function BuscarUsuarios(cn, palavraParaPesquisa)
         sql = "SELECT [nome],[usuario],[endereco],[cidade],[cep],[usuid] FROM [treinamento].[dbo].[usuario]"
@@ -124,6 +154,4 @@ Class cUsuario
         set BuscarUsuarioPorId = rs
     end function
 End Class
-
-
 %>

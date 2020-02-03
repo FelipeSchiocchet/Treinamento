@@ -1,17 +1,11 @@
 <%
 Class Conexao
-    '
-    ' Propriedades da classe
-    '
 
     Private DataSource
     Private DataBase
     Private Usuario
     Private Senha
 
-    '
-    ' M�todos Get e Set de cada propriedade
-    '
     Public function getDataSource()
         getDataSource = DataSource
     End function
@@ -44,11 +38,6 @@ Class Conexao
         Senha = p_senha
     End sub	
 
-    '
-    ' Métodos complementares  
-    '
-  
-    'Abre uma conexao
     public function AbreConexao()
         dim DataSource : DataSource= "ES203"
         dim DataBase : DataBase = "treinamento"
