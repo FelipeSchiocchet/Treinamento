@@ -1,4 +1,5 @@
-<!-- #include file = "../configs/config.asp" -->
+<!-- #include file = "../Models/Conexao.class.asp" -->
+<!-- #include file = "../Models/Tarefa.class.asp" -->
 <%  
 Response.CodePage = 65001
 Response.CharSet = "UTF-8"
@@ -16,7 +17,9 @@ dim tarID
 dim novaData
 dim Data, Data2
         
-function buscarUsuarios
+function buscaUsuarios
+    set objconexao = new Conexao
+    set cn = objconexao.AbreConexao()
     sqlEst = "SELECT * FROM [treinamento].[dbo].[usuario]"
     Set recordSet=Server.CreateObject("ADODB.recordset")
     recordSet.Open sqlEst, cn,&H0001
@@ -38,20 +41,36 @@ function buscarUsuarios
     response.Write "]"
     response.Write "}"
     recordSet.Close
+    objconexao.Fecharconexao(cn)
 end function
 
 function converterData(tardata)
+stop
     novaData = split(tarData," ")
     Data = split(novaData(0),"/")
     Data2 = Data(2) & "-" & Data(1) & "-" & Data(0)
-    converterData = Data2 & "T" & NovaData(1)
+    if (UBound(novaData)>0) then
+    converterData = Data2 & "T" & novaData(1)
+    else
+    converterData = Data2 & "T00:00"
+    end if 
 end function                        
 
-function colocarDados    
+Function FormatarDataBanco(dataSemFormato)
+    soHora = split(dataSemFormato,"T")
+    d = split(soHora(0),"-")
+    FormatarDataBanco = d(0) & "-" & d(2) & "-" & d(1) & " " & soHora(1)
+  End Function
+
+function colocarDados  
+
     tarID = CInt(request("tarID")) 
     
     if tarID <> "" then        
-        set rs = cn.execute("select * from tarefa where tarID = "& tarID )     
+    set objconexao = new Conexao
+    set cn = objconexao.AbreConexao()
+    set objTarefa = new cTarefa
+    set rs = objTarefa.BuscarTarefaPorId(cn, tarID)     
         if not rs.eof then
             response.Write  "{"   
             response.Write      """tarTitulo"": """ & rs("tarTitulo") & """"
@@ -63,51 +82,56 @@ function colocarDados
 
         end if
     end if
-   
+    rs.Close
+    objconexao.Fecharconexao(cn)
 end function
 
 function cadastrarTarefa()
-    tarTitulo = cstr("" & Replace(request.form("tarTitulo"),"'","''"))
-    geradorID = cstr("" & Replace(request.form("geradorID"),"'","''"))
-    tarData = Cdate(cstr("" & Replace(request.form("tarData"),"T"," ")))
-    tarStatus = cstr("" & Replace(request.form("tarStatus"),"'","''"))
-    tarDescricao = cstr("" & Replace(request.form("tarDescricao"),"'","''"))
-
-    if validaNome(tarTitulo,geradorID,tarData,tarStatus,tarDescricao) then
-        cn.execute("insert into tarefa (tarTitulo,geradorID,tarData,tarStatus,tarDescricao) VALUES ('"& tarTitulo &"', '"& geradorID &"', '"& tarData &"', '"& tarStatus &"', '"& tarDescricao &"'); ")
-        set rs = cn.execute("select TOP 1 tarID FROM tarefa ORDER BY tarID DESC")     
-        if not rs.eof then
-            tarID = cint(rs("tarID"))
-        end if
-    end if
+stop
+    set objconexao = new Conexao
+    set cn = objconexao.AbreConexao()
+    set objTarefa = new cTarefa
+    objTarefa.setTitulo(request("tartitulo"))
+    objTarefa.setGeradorId(request("geradorID"))
+    objTarefa.setDescricao(request("tarDescricao"))
+    objTarefa.setStatus(request("tarstatus"))
+    objTarefa.setDataGeracao(FormatarDataBanco(request("tardata")))
+    tarID = objTarefa.InsercaoTarefa(cn,ObjTarefa)     
 
     response.Write  "{"
     response.Write      """sucesso"":""true"""
     response.Write      ",""tarID"": " & tarID 
     response.Write  "}"
-
+    
+    objconexao.Fecharconexao(cn)
 end function
 
 function alterarTarefa()
-    tarID = CInt(request("tarID"))
-    tarTitulo = cstr("" & Replace(request.form("tarTitulo"),"'","''"))
-    geradorID = cstr("" & Replace(request.form("geradorID"),"'","''"))
-    tarData = Cdate(cstr("" & Replace(request.form("tarData"),"T"," ")))
-    tarStatus = cstr("" & Replace(request.form("tarStatus"),"'","''"))
-    tarDescricao = cstr("" & Replace(request.form("tarDescricao"),"'","''"))
+    set objconexao = new Conexao
+    set cn = objconexao.AbreConexao()
+    set objTarefa = new cTarefa
+    objTarefa.setId(CInt(request("tarID")))
+    objTarefa.setTitulo(request("tartitulo"))
+    objTarefa.setGeradorId(request("geradorID"))
+    objTarefa.setDescricao(request("tarDescricao"))
+    objTarefa.setStatus(request("tarstatus"))
+    objTarefa.setDataGeracao(FormatarDataBanco(request("tardata")))
+    tarID = objTarefa.UpdateTarefa(cn,ObjTarefa)
 
-    if validaNome(tarTitulo,geradorID,tarData,tarStatus,tarDescricao) then
-        cn.execute("update tarefa SET tarTitulo = '"& tarTitulo &"', geradorID = '"& geradorID &"', tarData = '"& tarData &"', tarStatus = '"& tarStatus &"', tarDescricao = '"& tarDescricao &"' where tarID ="& tarID )
-    end if
     response.Write  "{"
     response.Write      """sucesso"":""true"""
     response.Write  "}"
+    objconexao.Fecharconexao(cn)
 end function
 
 function deletarTarefa()
     
     tarID = CInt(request("tarID"))
-    cn.execute("delete from tarefa where tarID ="& tarID )  
+    set objconexao = new Conexao
+    set cn = objconexao.AbreConexao()
+    set objTarefa = new cTarefa
+    ObjTarefa.setId(CInt(request("tarID")))
+    rs = ObjTarefa.ExcluirTarefa(cn,tarID)
     response.Write  "{"
     response.Write      """sucesso"":""true"""
     response.Write  "}"

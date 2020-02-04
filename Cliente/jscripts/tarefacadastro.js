@@ -49,6 +49,7 @@ function prencherdados(tarID) {
         },
         success: function (data) {
             if (data) {
+                debugger;
                 document.getElementById("tarTitulo").value = data.tarTitulo;
                 document.getElementById("geradorID").value = data.geradorID;
                 document.getElementById("tarData").value = data.tarData;
@@ -67,17 +68,19 @@ function prencherdados(tarID) {
 function cadastrarTarefa(event) {
     event.preventDefault();
     if (validarDados()) {
+        debugger;
+        var dados = {
+            fnTarget: "cadastrarTarefa",
+            tarTitulo: document.getElementById("tarTitulo").value,
+            geradorID: document.getElementById("geradorID").value,
+            tarData: document.getElementById("tarData").value,
+            tarStatus: document.getElementById("tarStatus").value,
+            tarDescricao: document.getElementById("tarDescricao").value
+        };
         $.ajax({
             type: "POST",
             url: "../Servidor/Controllers/TarefaCadastroAjax.asp",
-            data: {
-                fnTarget: "cadastrarTarefa",
-                tarTitulo: document.getElementById("tarTitulo").value,
-                geradorID: document.getElementById("geradorID").value,
-                tarData: document.getElementById("tarData").value,
-                tarStatus: document.getElementById("tarStatus").value,
-                tarDescricao: document.getElementById("tarDescricao").value
-            },
+            data: dados,
             success: function (retorno) {
                 if (retorno.sucesso == 'true') {
                     mostraAlerta("Tarefa cadastrada com sucesso");
@@ -98,7 +101,7 @@ function buscaUsuarios(idElemento, geradorID) {
         type: 'GET',
         contentType: 'application/json',
         data: {
-            fnTarget: "buscarUsuarios"
+            fnTarget: "buscaUsuarios"
         },
         success: function (data) {
             preencheOptions(idElemento, data, geradorID);
