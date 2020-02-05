@@ -234,9 +234,10 @@ function mudarImagem(e) {
 
     }
     return $.ajax({
-        url: "./update.asp",
+        url: "../Servidor/Controllers/listaAjax.asp",
         type: 'POST',
         data: {
+            "fnTarget": "salvarStatuseTitulo",
             "status": status,
             "id": objImagem.id
         },
@@ -293,9 +294,10 @@ function editarTitulo(e) {
 function salvaTarefa(txt, id) {
 
     return $.ajax({
-        url: "update.asp",
+        url: "../Servidor/Controllers/listaAjax.asp",
         type: 'POST',
         data: {
+            "fnTarget": "salvarStatuseTitulo",
             "titulo": txt,
             "id": id
         },

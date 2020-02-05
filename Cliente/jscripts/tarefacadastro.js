@@ -3,7 +3,6 @@ window.addEventListener('DOMContentLoaded', function () {
     const urlParams = new URLSearchParams(queryString);
     var tarID = urlParams.get("tarID");
     AdicionarEventos(tarID);
-    debugger;
     if (tarID > 0) {
         cadastrar.style.display = 'none';
         alterar.style.display = 'inline';
@@ -49,7 +48,6 @@ function prencherdados(tarID) {
         },
         success: function (data) {
             if (data) {
-                debugger;
                 document.getElementById("tarTitulo").value = data.tarTitulo;
                 document.getElementById("geradorID").value = data.geradorID;
                 document.getElementById("tarData").value = data.tarData;
@@ -68,19 +66,17 @@ function prencherdados(tarID) {
 function cadastrarTarefa(event) {
     event.preventDefault();
     if (validarDados()) {
-        debugger;
-        var dados = {
-            fnTarget: "cadastrarTarefa",
-            tarTitulo: document.getElementById("tarTitulo").value,
-            geradorID: document.getElementById("geradorID").value,
-            tarData: document.getElementById("tarData").value,
-            tarStatus: document.getElementById("tarStatus").value,
-            tarDescricao: document.getElementById("tarDescricao").value
-        };
         $.ajax({
             type: "POST",
             url: "../Servidor/Controllers/TarefaCadastroAjax.asp",
-            data: dados,
+            data: {
+                fnTarget: "cadastrarTarefa",
+                tarTitulo: document.getElementById("tarTitulo").value,
+                geradorID: document.getElementById("geradorID").value,
+                tarData: document.getElementById("tarData").value,
+                tarStatus: document.getElementById("tarStatus").value,
+                tarDescricao: document.getElementById("tarDescricao").value
+            },
             success: function (retorno) {
                 if (retorno.sucesso == 'true') {
                     mostraAlerta("Tarefa cadastrada com sucesso");

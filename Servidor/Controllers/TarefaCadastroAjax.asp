@@ -45,7 +45,6 @@ function buscaUsuarios
 end function
 
 function converterData(tardata)
-stop
     novaData = split(tarData," ")
     Data = split(novaData(0),"/")
     Data2 = Data(2) & "-" & Data(1) & "-" & Data(0)
@@ -87,7 +86,6 @@ function colocarDados
 end function
 
 function cadastrarTarefa()
-stop
     set objconexao = new Conexao
     set cn = objconexao.AbreConexao()
     set objTarefa = new cTarefa
@@ -125,7 +123,6 @@ function alterarTarefa()
 end function
 
 function deletarTarefa()
-    
     tarID = CInt(request("tarID"))
     set objconexao = new Conexao
     set cn = objconexao.AbreConexao()
@@ -135,6 +132,7 @@ function deletarTarefa()
     response.Write  "{"
     response.Write      """sucesso"":""true"""
     response.Write  "}"
+    objconexao.Fecharconexao(cn)
 
 end function
 

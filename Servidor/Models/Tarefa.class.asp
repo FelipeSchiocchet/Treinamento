@@ -81,7 +81,6 @@ Class cTarefa
 	end function
 
     public function UpdateTarefa(cn,ObjTarefa)
-    stop
         sql="UPDATE [dbo].[tarefa] SET "
         sql=sql & "[tarTitulo] = '" & ObjTarefa.getTitulo() & "',"
         sql=sql & "[geradorID] = '" & ObjTarefa.getGeradorId() & "',"
@@ -98,7 +97,7 @@ Class cTarefa
         end if
 	end function
     
-    public function UpdateTitulo(cn,ObjTarefa)
+    public function AlterarTitulo(cn,ObjTarefa)
         sql="UPDATE [dbo].[tarefa] SET "
         sql=sql & "[tarTitulo] = '" & ObjTarefa.getTitulo() & "'"       
         sql=sql & " WHERE [tarID]=" & ObjTarefa.getId() & ";"

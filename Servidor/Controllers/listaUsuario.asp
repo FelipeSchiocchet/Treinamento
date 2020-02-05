@@ -3,7 +3,7 @@
 <%
 Response.CodePage = 65001
 Response.CharSet = "UTF-8"
-'Response.ContentType = "application/json"
+Response.ContentType = "application/json"
 
 if (Request("fnTarget") <> "") then
     RegistrosPorPagina = CInt(Request("RegistrosPorPagina"))
@@ -28,9 +28,9 @@ function BuscarUsuariosPaginados()
     set recordSet = ObjUsuario.BuscarUsuarios(cn,palavraParaPesquisa)
    
     if not recordSet.eof then
+        intTotal = recordSet.recordcount
         recordSet.pageSize = RegistrosPorPagina
         Ndepaginas = recordSet.PageCount
-        intTotal = recordSet.recordcount
         if Npagina <= 0 then
                 Npagina = 1
         end if    
@@ -38,13 +38,10 @@ function BuscarUsuariosPaginados()
             Npagina = Ndepaginas
         End if
         recordSet.AbsolutePage = Npagina
-        fimPagina = registrosPorPagina * Npagina     
+        fimPagina = registrosPorPagina * Npagina  
+        registrosdaPagina = 0    
         response.Write "{"
-        response.Write """TotalRegistros"":""" & intTotal & """"
-        response.Write ",""RegistrosPorPagina"":""" & RegistrosPorPagina & """"
-        response.Write ",""PaginaAtual"":""" & Npagina & """"
-        response.Write ",""TotalPaginas"":""" & Ndepaginas & """"
-        response.Write ",""Dados"":["
+        response.Write """Dados"":["
          Do While not recordSet.eof and (recordSet.AbsolutePosition <= fimPagina)
             response.Write  "{"
                 response.Write      """Nome"": """ & recordSet("nome") & """"
@@ -54,12 +51,17 @@ function BuscarUsuariosPaginados()
                 response.Write      ",""Cep"": """ & recordSet("cep") & """"
                 response.Write      ",""usuid"":""" & recordSet("usuid") &""""
             response.Write  "}"
+            registrosdaPagina=registrosdaPagina+1
             recordSet.MoveNext
             if (not recordSet.eof and recordSet.AbsolutePosition <= fimPagina) then
                 response.Write ","
             end if   
         Loop
         response.Write "]"
+        response.Write ",""TotalRegistros"":""" & intTotal & """"
+        response.Write ",""RegistrosPorPagina"":""" & registrosdaPagina & """"
+        response.Write ",""PaginaAtual"":""" & Npagina & """"
+        response.Write ",""TotalPaginas"":""" & Ndepaginas & """"
         response.Write "}" 
     end if
     recordSet.close()
