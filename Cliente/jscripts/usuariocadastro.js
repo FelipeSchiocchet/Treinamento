@@ -178,7 +178,6 @@ function alterarUsuario(event) {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     var usuid = urlParams.get("usuid");
-    debugger;
     var data = {
         fnTarget: "alterarUsuario",
         usuid: usuid,
@@ -212,7 +211,6 @@ function deletarUsuario(event) {
     event.preventDefault();
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    debugger;
     var usuid = urlParams.get("usuid");
     if (usuid == geradorID.value) {
         mostraAlerta("Usuários geradores de tarefas não podem ser deletados");

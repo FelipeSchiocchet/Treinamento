@@ -1,15 +1,9 @@
 <%
 Class Estado
-    
-    '
-    ' Propriedades da classe
-    '
+
     Private Id
     Private Nome
 
-    '
-    ' M�todos Get e Set de cada propriedade
-    '
     Public function getId()
         getId = Id
     End function

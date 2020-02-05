@@ -1,5 +1,4 @@
 window.addEventListener('load', function () {
-    debugger;
     document.getElementById("botaologin").addEventListener("click", function () {
         event.preventDefault();
         validarLogon();
@@ -27,7 +26,6 @@ function validarLogon() {
             senha: document.getElementById("senha").value
         },
         success: function (data) {
-            debugger;
             if (data.retorno) {
                 window.location.href = "header.asp";
             } else {

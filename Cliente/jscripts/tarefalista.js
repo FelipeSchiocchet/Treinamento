@@ -271,18 +271,15 @@ function editarTitulo(e) {
 
     input.addEventListener('keydown', function (e) {
         if (e.keyCode == 13) {
-            debugger;
             salvaTarefa(input.value, input.id);
         }
         if (e.keyCode == 27) {
-            debugger;
             e.currentTarget.parentElement.innerText = titulo;
             var remove = e.currentTarget;
             remove.remove();            
         }
     });
     input.addEventListener('blur', function (e) {
-        debugger;
         e.currentTarget.parentElement.innerText = titulo;
         var remove = e.currentTarget;
         remove.remove();      
