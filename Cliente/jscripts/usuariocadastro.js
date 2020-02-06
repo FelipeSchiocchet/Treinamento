@@ -20,6 +20,7 @@ function AdicionarEventos(usuid) {
     var $btnAlterar = document.getElementById("alterar");
     var $btnDeletar = document.getElementById("deletar");
     var $btnNovo = document.getElementById("novo");
+    var $mascara = document.getElementById("cep");
 
     $btnCadastrar.addEventListener("click", function (e) {
         cadastrarUsuario(e);
@@ -37,8 +38,22 @@ function AdicionarEventos(usuid) {
         limparCampos(e);
     });
 
+    $mascara.addEventListener("keypress", function (e) {
+        mascara(this, '##.###-###');
+        apenasNumero(e);
+    });
 }
 
+function apenasNumero(evt) {
+    var acao = evt || window.event;
+    var key = acao.keyCode || acao.which;
+    key = String.fromCharCode(key);
+    var regex = /^[0-9]+$/;
+    if( !regex.test(key) ) {
+        acao.returnValue = false;
+       if(acao.preventDefault) acao.preventDefault();
+    }
+ }
 function mascara(t, mask) {
     var i = t.value.length;
     var saida = mask.substring(1, 0);

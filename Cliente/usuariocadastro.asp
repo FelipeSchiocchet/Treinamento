@@ -22,7 +22,7 @@
             Cidade:
             <input type="text" name="cidade" id="cidade" class="cidade"><br>
             CEP:
-            <input type="text" name="cep" id="cep" class="cep" onkeypress="mascara(this, '##.###-###')" maxlength="10">
+            <input type="text" name="cep" id="cep" class="cep" maxlength="10">
             Estado:
             <select class="estadoid" id="estadoid" name="estadoid"></select>
             <br>

@@ -51,7 +51,7 @@ function BuscarUsuariosPaginados()
                 response.Write      ",""Cep"": """ & recordSet("cep") & """"
                 response.Write      ",""usuid"":""" & recordSet("usuid") &""""
             response.Write  "}"
-            registrosdaPagina=registrosdaPagina+1
+            registrosdaPagina = registrosdaPagina + 1
             recordSet.MoveNext
             if (not recordSet.eof and recordSet.AbsolutePosition <= fimPagina) then
                 response.Write ","
