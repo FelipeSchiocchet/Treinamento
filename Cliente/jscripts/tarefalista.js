@@ -13,7 +13,7 @@ function BuscarTarefas(fnTarget, RegistrosPorPagina, PaginaPesquisa) {
         "PaginaPesquisa": PaginaPesquisa,
     }
     return $.ajax({
-        url: "../Servidor/Controllers/listaAjax.asp",
+        url: "../Servidor/Controllers/tarefa.asp",
         type: 'POST',
         data: dadosPesquisa,
         success: function (data) {
@@ -234,7 +234,7 @@ function mudarImagem(e) {
 
     }
     return $.ajax({
-        url: "../Servidor/Controllers/listaAjax.asp",
+        url: "../Servidor/Controllers/tarefa.asp",
         type: 'POST',
         data: {
             "fnTarget": "salvarStatuseTitulo",
@@ -291,7 +291,7 @@ function editarTitulo(e) {
 function salvaTarefa(txt, id) {
 
     return $.ajax({
-        url: "../Servidor/Controllers/listaAjax.asp",
+        url: "../Servidor/Controllers/tarefa.asp",
         type: 'POST',
         data: {
             "fnTarget": "salvarStatuseTitulo",

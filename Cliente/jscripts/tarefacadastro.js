@@ -41,7 +41,7 @@ function AdicionarEventos(tarID) {
 function prencherdados(tarID) {
     return $.ajax({
         type: "POST",
-        url: "../Servidor/Controllers/TarefaCadastroAjax.asp",
+        url: "../Servidor/Controllers/tarefa.asp",
         data: {
             fnTarget: "colocarDados",
             tarID: tarID
@@ -68,7 +68,7 @@ function cadastrarTarefa(event) {
     if (validarDados()) {
         $.ajax({
             type: "POST",
-            url: "../Servidor/Controllers/TarefaCadastroAjax.asp",
+            url: "../Servidor/Controllers/tarefa.asp",
             data: {
                 fnTarget: "cadastrarTarefa",
                 tarTitulo: document.getElementById("tarTitulo").value,
@@ -93,7 +93,7 @@ function buscaUsuarios(idElemento, geradorID) {
         return false;
     }
     return $.ajax({
-        url: "../Servidor/Controllers/TarefaCadastroAjax.asp",
+        url: "../Servidor/Controllers/tarefa.asp",
         type: 'GET',
         contentType: 'application/json',
         data: {
@@ -160,7 +160,7 @@ function alterarTarefa(event, tarID) {
     if (validarDados()) {
         $.ajax({
             type: "POST",
-            url: "../Servidor/Controllers/TarefaCadastroAjax.asp",
+            url: "../Servidor/Controllers/tarefa.asp",
             data: data,
             success: function (retorno) {
                 if (retorno.sucesso == 'true') {
@@ -179,7 +179,7 @@ function deletarTarefa(event, tarID) {
 
     $.ajax({
         type: "POST",
-        url: "../Servidor/Controllers/TarefaCadastroAjax.asp",
+        url: "../Servidor/Controllers/tarefa.asp",
         data: {
             fnTarget: "deletarTarefa",
             tarID: tarID

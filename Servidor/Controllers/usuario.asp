@@ -33,7 +33,6 @@ function colocarDados
         geradorID = records("geradorID")
     end if
     records.Close
-     
         if not rs.eof then
         response.Write  "{"   
     response.Write      """usuario"": """ & rs("usuario") & """"
