@@ -1,14 +1,14 @@
 window.addEventListener('load', function () {
     document.getElementById("botaologin").addEventListener("click", function () {
         event.preventDefault();
+        debugger;
         validarLogon();
     });
 });
 
-
 function validarLogon() {
     if (usuario.value == "") {
-        mostraAlerta("Preencha o campo usuario!");
+        mostraAlerta("Preencha o campo usuário!");
         return false;
     }
     else if (senha.value == "") {
@@ -34,7 +34,6 @@ function validarLogon() {
             }
         },
         error: function (obj, err) {
-
             mostraAlerta("Servidor com erro, por favor usar mais tarde. " + err)
         }
     });

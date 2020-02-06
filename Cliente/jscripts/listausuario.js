@@ -13,7 +13,7 @@ function BuscarUsuarios(fnTarget, RegistrosPorPagina, PaginaPesquisa) {
         "PaginaPesquisa": PaginaPesquisa,
     }
     return $.ajax({
-        url: "../Servidor/Controllers/listaUsuario.asp",
+        url: "../Servidor/Controllers/usuario.asp",
         type: 'POST',
         data: dadosPesquisa,
         success: function (data) {

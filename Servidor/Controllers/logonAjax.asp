@@ -1,22 +1,25 @@
-<!-- #include file = "../configs/config.asp" -->
+<!-- #include file = "../Models/Conexao.class.asp" -->
+<!-- #include file = "../Models/Usuario.class.asp" -->
 <%
+
 if (Request("fnTarget") <> "") then
     Execute(Request("fnTarget") & "()")
 end if
  
 function validarLogon()
-    
     dim usuario
     dim senha
-    dim recordSet
+    dim rs
     dim retorno : retorno = "false"
 
-    usuario = replace(Request.Form("usuario"),"'","''")
-    senha = replace(Request.Form("senha"),"'","''")
-
-    set recordSet = cn.execute("select * from usuario where usuario = '" & usuario & "' and senha = '" & senha & "'")
+    set objconexao = new Conexao
+    set cn = objconexao.AbreConexao()
+    set objUsuario = new cUsuario
+    ObjUsuario.setUsuario(replace(Request("usuario"),"'","''"))
+    ObjUsuario.setSenha(replace(Request("senha"),"'","''"))
+    set rs = objUsuario.BuscarUsuarioPorNomeSenha(cn, ObjUsuario)
    
-    if (not recordSet.eof) then
+    if (not rs.eof) then
         Session("usuario") = "logado"
         retorno = "true"
     end if  
@@ -25,6 +28,8 @@ function validarLogon()
     response.Write  "{"
     response.Write      """retorno"": " & retorno 
     response.Write  "}"
-
+    
+    rs.Close
+    objconexao.Fecharconexao(cn)
 end function
 %>
