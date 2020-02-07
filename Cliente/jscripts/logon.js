@@ -15,7 +15,6 @@ function validarLogon() {
         mostraAlerta("Preencha o campo senha!");
         return false;
     }
-
     $.ajax({
         url: "../Servidor/Controllers/logonAjax.asp",
         type: "POST",

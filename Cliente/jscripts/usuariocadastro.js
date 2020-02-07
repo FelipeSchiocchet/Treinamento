@@ -21,11 +21,11 @@ function AdicionarEventos(usuid) {
     var $btnDeletar = document.getElementById("deletar");
     var $btnNovo = document.getElementById("novo");
     var $mascara = document.getElementById("cep");
-
+    
     $btnCadastrar.addEventListener("click", function (e) {
         cadastrarUsuario(e);
     });
-
+    
     $btnAlterar.addEventListener("click", function (e) {
         alterarUsuario(e, usuid);
     });
@@ -33,7 +33,7 @@ function AdicionarEventos(usuid) {
     $btnDeletar.addEventListener("click", function (e) {
         deletarUsuario(e);
     });
-
+    
     $btnNovo.addEventListener("click", function (e) {
         limparCampos(e);
     });
@@ -42,55 +42,6 @@ function AdicionarEventos(usuid) {
         mascara(this, '##.###-###');
         apenasNumero(e);
     });
-}
-
-function apenasNumero(evt) {
-    var acao = evt || window.event;
-    var key = acao.keyCode || acao.which;
-    key = String.fromCharCode(key);
-    var regex = /^[0-9]+$/;
-    if( !regex.test(key) ) {
-        acao.returnValue = false;
-       if(acao.preventDefault) acao.preventDefault();
-    }
- }
-function mascara(t, mask) {
-    var i = t.value.length;
-    var saida = mask.substring(1, 0);
-    var texto = mask.substring(i)
-    if (texto.substring(0, 1) != saida) {
-        t.value += texto.substring(0, 1);
-    }
-}
-
-function prencherdados(usuid) {
-    
-   return $.ajax({
-        type: "POST",
-        url: "../Servidor/Controllers/usuario.asp",
-        async: false,
-        data: {
-            fnTarget: "colocarDados",
-            usuid: usuid
-        },
-        success: function (data) {
-            if (data) {
-                document.getElementById("usuario").value = data.usuario;
-                document.getElementById("senha").value = data.senha;
-                document.getElementById("nome").value = data.nome;
-                document.getElementById("endereco").value = data.endereco;
-                document.getElementById("cidade").value = data.cidade;
-                document.getElementById("cep").value = data.cep;
-                document.getElementById("estadoid").options.selectedIndex = data.estadoid;
-                document.getElementById("geradorID").value = data.geradorID;
-                var estadoid = data.estadoid;
-                BuscaEstados(document.getElementById("estadoid"), estadoid);
-            }
-       },
-        error: function (obj, err) {
-           mostraAlerta("Servidor com erro, por favor usar mais tarde. " + err)
-       }
-    })
 }
 
 function cadastrarUsuario(event) {
@@ -118,41 +69,6 @@ function cadastrarUsuario(event) {
                 }
             }
         });
-
-    }
-}
-
-function BuscaEstados(idElemento, estadoid) {
-    if (!idElemento) {
-        return false;
-    }
-    return $.ajax({
-        url: "../Servidor/Controllers/estado.asp",
-        type: 'GET',
-        contentType: 'application/json',
-        data: {
-            fnTarget: "buscarEstados" 
-        },
-        success: function (data) {
-            preencheOptions(idElemento, data, estadoid);
-        },
-        error: function (obj, err) {
-            mostraAlerta("Servidor com erro, por favor usar mais tarde. \n" + obj.responseText)
-        }
-    });
-}
-
-function preencheOptions(idElemento, data, estadoid) {
-    var estados = data['Estados'];
-    for (var i = 0; i < estados.length; i++) {
-        var opt = document.createElement('option');
-        if (i == estadoid) {
-            document.getElementById(i).selected = "true"
-        }
-        opt.innerHTML = estados[i]['nome'];
-        opt.value = estados[i]['estadoid'];
-        opt.id = estados[i]['estadoid'];
-        idElemento.appendChild(opt);
     }
 }
 
@@ -253,7 +169,6 @@ function deletarUsuario(event) {
 
 function limparCampos(e) {
     event.preventDefault();
-
     $.ajax({
         type: "POST",
         url: "../Servidor/Controllers/usuario.asp",
@@ -269,6 +184,89 @@ function limparCampos(e) {
             mostraAlerta("Servidor com erro, por favor usar mais tarde. " + err)
         }
     });
+}
+
+function mascara(t, mask) {
+    var i = t.value.length;
+    var saida = mask.substring(1, 0);
+    var texto = mask.substring(i)
+    if (texto.substring(0, 1) != saida) {
+        t.value += texto.substring(0, 1);
+    }
+}
+
+function apenasNumero(evt) {
+    var acao = evt || window.event;
+    var key = acao.keyCode || acao.which;
+    key = String.fromCharCode(key);
+    var regex = /^[0-9]+$/;
+    if( !regex.test(key) ) {
+        acao.returnValue = false;
+       if(acao.preventDefault) acao.preventDefault();
+    }
+ }
+
+function prencherdados(usuid) {
+   return $.ajax({
+        type: "POST",
+        url: "../Servidor/Controllers/usuario.asp",
+        async: false,
+        data: {
+            fnTarget: "colocarDados",
+            usuid: usuid
+        },
+        success: function (data) {
+            if (data) {
+                document.getElementById("usuario").value = data.usuario;
+                document.getElementById("senha").value = data.senha;
+                document.getElementById("nome").value = data.nome;
+                document.getElementById("endereco").value = data.endereco;
+                document.getElementById("cidade").value = data.cidade;
+                document.getElementById("cep").value = data.cep;
+                document.getElementById("estadoid").options.selectedIndex = data.estadoid;
+                document.getElementById("geradorID").value = data.geradorID;
+                var estadoid = data.estadoid;
+                BuscaEstados(document.getElementById("estadoid"), estadoid);
+            }
+       },
+        error: function (obj, err) {
+           mostraAlerta("Servidor com erro, por favor usar mais tarde. " + err)
+       }
+    })
+}
+
+function BuscaEstados(idElemento, estadoid) {
+    if (!idElemento) {
+        return false;
+    }
+    return $.ajax({
+        url: "../Servidor/Controllers/estado.asp",
+        type: 'GET',
+        contentType: 'application/json',
+        data: {
+            fnTarget: "buscarEstados" 
+        },
+        success: function (data) {
+            preencheOptions(idElemento, data, estadoid);
+        },
+        error: function (obj, err) {
+            mostraAlerta("Servidor com erro, por favor usar mais tarde. \n" + obj.responseText)
+        }
+    });
+}
+
+function preencheOptions(idElemento, data, estadoid) {
+    var estados = data['Estados'];
+    for (var i = 0; i < estados.length; i++) {
+        var opt = document.createElement('option');
+        if (i == estadoid) {
+            document.getElementById(i).selected = "true"
+        }
+        opt.innerHTML = estados[i]['nome'];
+        opt.value = estados[i]['estadoid'];
+        opt.id = estados[i]['estadoid'];
+        idElemento.appendChild(opt);
+    }
 }
 
 function mostraAlerta(mensagem) {

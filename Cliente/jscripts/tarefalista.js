@@ -29,57 +29,6 @@ function BuscarTarefas(fnTarget, RegistrosPorPagina, PaginaPesquisa) {
     });
 }
 
-function AdicionarEventos(dados) {
-    $input = document.getElementById("input");
-    $botaovoltar = document.getElementById("botaovoltar");
-    $botaoavancar = document.getElementById("botaoavancar");
-    $botaovoltar.addEventListener("click", function (e) {
-        voltar(e);
-    });
-
-    $botaoavancar.addEventListener("click", function (e) {
-        avancar(e);
-    });
-
-    $input.addEventListener("keydown", function (e) {
-        if (e.keyCode == 13) {
-            input(dados);
-        }
-    });
-}
-
-function input(dados) {
-    PaginaPesquisa = isNaN($input.value) ? 1 : Number($input.value);
-    if (PaginaPesquisa <= 0) {
-        PaginaPesquisa = 1
-    }
-    if (PaginaPesquisa > dados.TotalPaginas) {
-        PaginaPesquisa = Number(dados.TotalPaginas)
-    }
-    var table = document.getElementById("tblTarefas")
-    while (table.rows.length > 0) {
-        table.deleteRow(0);
-    }
-    BuscarTarefas("BuscarTarefasPaginadas", RegistrosPorPagina, PaginaPesquisa);
-}
-
-function avancar(e) {
-    PaginaPesquisa = Number(PaginaPesquisa + 1);
-    var table = document.getElementById("tblTarefas")
-    while (table.rows.length > 0) {
-        table.deleteRow(0);
-    }
-    BuscarTarefas("BuscarTarefasPaginadas", RegistrosPorPagina, PaginaPesquisa);
-}
-function voltar(e) {
-    PaginaPesquisa = Number(PaginaPesquisa - 1);
-    var table = document.getElementById("tblTarefas")
-    while (table.rows.length > 0) {
-        table.deleteRow(0);
-    }
-    BuscarTarefas("BuscarTarefasPaginadas", RegistrosPorPagina, PaginaPesquisa);
-}
-
 function PreencheTabela(dados) {
     if (!dados) {
         return;
@@ -132,7 +81,7 @@ function TabelaCriarCorpo(tabela, dadosCorpo) {
                 cell.id = element['tarID'];
                 cell.addEventListener("dblclick", function (e){
                    editarTitulo(e);
-            });
+                });
             } 
             if (key == 'Status') {
                 var imagem = document.createElement("img");
@@ -177,8 +126,7 @@ function TabelaCriarRodape(tabela, dados) {
     inputPagina.type = "text";//type="text"
     inputPagina.id = "input";// id="input"
     inputPagina.name = "input";//name="input" 
-
-
+    
     var linkAvancaUmaPagina = document.createElement("b");//<a></a>
     var liAvancaUmaPagina = document.createElement("button");//<li></li>;
     liAvancaUmaPagina.innerText = ">>";// >>
@@ -186,12 +134,12 @@ function TabelaCriarRodape(tabela, dados) {
     liAvancaUmaPagina.id = "botaoavancar";// id="botaoavancar"
     liAvancaUmaPagina.classList.add("botaoavancar");// class="botaoavancar""
     linkAvancaUmaPagina.appendChild(liAvancaUmaPagina);//<a href="#"><li> >> </li></a>
-
+    
     var liPagina = document.createElement("li");//<li></li>;
     liPagina.innerText = "Página " + dados.PaginaAtual + " de " + dados.TotalPaginas + " Páginas";// Página 1 de 2 Páginas
     var liInfo = document.createElement("li");//<li></li>;
     liInfo.innerText = "Mostrando " + dados.RegistrosPorPagina + " de " + dados.TotalRegistros + " Registros";// Mostrando 2 de 2 registros
-
+    
     ul.appendChild(liVoltaUmaPagina);
     ul.appendChild(inputPagina);
     ul.appendChild(liAvancaUmaPagina);
@@ -201,15 +149,15 @@ function TabelaCriarRodape(tabela, dados) {
     ul2.appendChild(liInfo);
     div2.appendChild(ul2);
     cell2.appendChild(div2);
-
+    
     if (dados.PaginaAtual == dados.TotalPaginas) {
         if (!document.getElementById('botaoavancar').disabled)
-            document.getElementById('botaoavancar').disabled = true;
+        document.getElementById('botaoavancar').disabled = true;
     }
     if (dados.PaginaAtual <= 1) {
         if (!document.getElementById('botaovoltar').disabled)
             document.getElementById('botaovoltar').disabled = true;
-    }
+        }
 }
 
 function mudarImagem(e) {
@@ -229,7 +177,7 @@ function mudarImagem(e) {
     else if (objImagem.src.indexOf("1") > -1) {
         objImagem.src = "./imagens/0.gif";
         status = 0;
-
+        
     }
     return $.ajax({
         url: "../Servidor/Controllers/tarefa.asp",
@@ -283,7 +231,7 @@ function editarTitulo(e) {
         remove.remove();      
     });
     e.currentTarget.appendChild(input);
- }   
+}   
 
 function salvaTarefa(txt, id) {
     return $.ajax({
@@ -301,4 +249,57 @@ function salvaTarefa(txt, id) {
             alert("Erro: " + error.Message);
         }
     });
+}
+
+function AdicionarEventos(dados) {
+    $input = document.getElementById("input");
+    $botaovoltar = document.getElementById("botaovoltar");
+    $botaoavancar = document.getElementById("botaoavancar");
+
+    $botaovoltar.addEventListener("click", function (e) {
+        voltar(e);
+    });
+
+    $botaoavancar.addEventListener("click", function (e) {
+        avancar(e);
+    });
+
+    $input.addEventListener("keydown", function (e) {
+        if (e.keyCode == 13) {
+            input(dados);
+        }
+    });
+}
+
+function avancar(e) {
+    PaginaPesquisa = Number(PaginaPesquisa + 1);
+    var table = document.getElementById("tblTarefas")
+    while (table.rows.length > 0) {
+        table.deleteRow(0);
+    }
+    BuscarTarefas("BuscarTarefasPaginadas", RegistrosPorPagina, PaginaPesquisa);
+}
+
+function voltar(e) {
+    PaginaPesquisa = Number(PaginaPesquisa - 1);
+    var table = document.getElementById("tblTarefas")
+    while (table.rows.length > 0) {
+        table.deleteRow(0);
+    }
+    BuscarTarefas("BuscarTarefasPaginadas", RegistrosPorPagina, PaginaPesquisa);
+}
+
+function input(dados) {
+    PaginaPesquisa = isNaN($input.value) ? 1 : Number($input.value);
+    if (PaginaPesquisa <= 0) {
+        PaginaPesquisa = 1
+    }
+    if (PaginaPesquisa > dados.TotalPaginas) {
+        PaginaPesquisa = Number(dados.TotalPaginas)
+    }
+    var table = document.getElementById("tblTarefas")
+    while (table.rows.length > 0) {
+        table.deleteRow(0);
+    }
+    BuscarTarefas("BuscarTarefasPaginadas", RegistrosPorPagina, PaginaPesquisa);
 }

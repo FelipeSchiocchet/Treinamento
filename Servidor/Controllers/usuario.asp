@@ -66,7 +66,6 @@ function cadastrarUsuario()
     response.Write      """sucesso"":""true"""
     response.Write      ",""UsuID"": " & usuid 
     response.Write  "}"
-    rs.Close
     objconexao.Fecharconexao(cn)
 end function
 
@@ -86,7 +85,6 @@ function alterarUsuario()
     response.Write  "{"
     response.Write      """sucesso"":""true"""
     response.Write  "}"
-    rs.Close
     objconexao.Fecharconexao(cn)
 end function
 
@@ -100,7 +98,6 @@ function deletarUsuario()
     response.Write  "{"
     response.Write      """sucesso"":""true"""
     response.Write  "}"
-    rs.Close
     objconexao.Fecharconexao(cn)
 end function
 

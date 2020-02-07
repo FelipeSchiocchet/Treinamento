@@ -80,7 +80,6 @@ function colocarDados()
 
         end if
     end if
-    rs.Close
     objconexao.Fecharconexao(cn)
 end function
 
