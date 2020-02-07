@@ -35,32 +35,7 @@ function AdicionarEventos(tarID) {
     $btnNovo.addEventListener("click", function (e) {
         window.location.href = "tarefacadastro.asp";
     });
-
-}
-
-function prencherdados(tarID) {
-    return $.ajax({
-        type: "POST",
-        url: "../Servidor/Controllers/tarefa.asp",
-        data: {
-            fnTarget: "colocarDados",
-            tarID: tarID
-        },
-        success: function (data) {
-            if (data) {
-                document.getElementById("tarTitulo").value = data.tarTitulo;
-                document.getElementById("geradorID").value = data.geradorID;
-                document.getElementById("tarData").value = data.tarData;
-                document.getElementById("tarStatus").value = data.tarStatus;
-                document.getElementById("tarDescricao").value = data.tarDescricao;
-                var geradorID = data.geradorID;
-                buscaUsuarios(document.getElementById("geradorID"), geradorID);
-            }
-        },
-        error: function (obj, err) {
-            mostraAlerta("Servidor com erro, por favor usar mais tarde. " + err)
-        }
-    })
+    
 }
 
 function cadastrarTarefa(event) {
@@ -83,67 +58,8 @@ function cadastrarTarefa(event) {
                     location.href = "tarefacadastro.asp?tarID=" + retorno.tarID;
                 }
             }
-        });
-
+        });        
     }
-}
-
-function buscaUsuarios(idElemento, geradorID) {
-    if (!idElemento) {
-        return false;
-    }
-    return $.ajax({
-        url: "../Servidor/Controllers/tarefa.asp",
-        type: 'GET',
-        contentType: 'application/json',
-        data: {
-            fnTarget: "buscaUsuarios"
-        },
-        success: function (data) {
-            preencheOptions(idElemento, data, geradorID);
-        },
-        error: function (obj, err) {
-            mostraAlerta("Servidor com erro, por favor usar mais tarde. \n" + obj.responseText)
-        }
-    });
-}
-
-function preencheOptions(idElemento, data, geradorID) {
-    var usuarios = data['Usuarios'];
-    for (var i = 0; i < usuarios.length; i++) {
-        var opt = document.createElement('option');
-        if (i == geradorID) {
-            document.getElementById(i).selected = "true"
-        }
-        opt.innerHTML = usuarios[i]['nome'];
-        opt.value = usuarios[i]['geradorID'];
-        opt.id = usuarios[i]['geradorID'];
-        idElemento.appendChild(opt);
-    }
-}
-
-function validarDados() {
-    if (tarTitulo.value == "") {
-        mostraAlerta("Preencha o campo Título!");
-        return false;
-    }
-    else if (geradorID.value == "") {
-        mostraAlerta("Preencha o campo Gerador!");
-        return false;
-    }
-    else if (tarDescricao.value == "") {
-        mostraAlerta("Preencha o campo Descrição!");
-        return false;
-    }
-    else if (tarStatus.value == "") {
-        mostraAlerta("Preencha o campo Status!");
-        return false;
-    }
-    else if (tarData.value == "") {
-        mostraAlerta("Preencha o campo Data!");
-        return false;
-    }
-    return true;
 }
 
 function alterarTarefa(event, tarID) {
@@ -194,6 +110,89 @@ function deletarTarefa(event, tarID) {
             mostraAlerta("Servidor com erro, por favor usar mais tarde. " + err)
         }
     });
+}
+
+function validarDados() {
+    if (tarTitulo.value == "") {
+        mostraAlerta("Preencha o campo Título!");
+        return false;
+    }
+    else if (geradorID.value == "") {
+        mostraAlerta("Preencha o campo Gerador!");
+        return false;
+    }
+    else if (tarDescricao.value == "") {
+        mostraAlerta("Preencha o campo Descrição!");
+        return false;
+    }
+    else if (tarStatus.value == "") {
+        mostraAlerta("Preencha o campo Status!");
+        return false;
+    }
+    else if (tarData.value == "") {
+        mostraAlerta("Preencha o campo Data!");
+        return false;
+    }
+    return true;
+}
+
+function prencherdados(tarID) {
+    return $.ajax({
+        type: "POST",
+        url: "../Servidor/Controllers/tarefa.asp",
+        data: {
+            fnTarget: "colocarDados",
+            tarID: tarID
+        },
+        success: function (data) {
+            if (data) {
+                document.getElementById("tarTitulo").value = data.tarTitulo;
+                document.getElementById("geradorID").value = data.geradorID;
+                document.getElementById("tarData").value = data.tarData;
+                document.getElementById("tarStatus").value = data.tarStatus;
+                document.getElementById("tarDescricao").value = data.tarDescricao;
+                var geradorID = data.geradorID;
+                buscaUsuarios(document.getElementById("geradorID"), geradorID);
+            }
+        },
+        error: function (obj, err) {
+            mostraAlerta("Servidor com erro, por favor usar mais tarde. " + err)
+        }
+    })
+}
+
+function buscaUsuarios(idElemento, geradorID) {
+    if (!idElemento) {
+        return false;
+    }
+    return $.ajax({
+        url: "../Servidor/Controllers/tarefa.asp",
+        type: 'GET',
+        contentType: 'application/json',
+        data: {
+            fnTarget: "buscaUsuarios"
+        },
+        success: function (data) {
+            preencheOptions(idElemento, data, geradorID);
+        },
+        error: function (obj, err) {
+            mostraAlerta("Servidor com erro, por favor usar mais tarde. \n" + obj.responseText)
+        }
+    });
+}
+
+function preencheOptions(idElemento, data, geradorID) {
+    var usuarios = data['Usuarios'];
+    for (var i = 0; i < usuarios.length; i++) {
+        var opt = document.createElement('option');
+        if (i == geradorID) {
+            document.getElementById(i).selected = "true"
+        }
+        opt.innerHTML = usuarios[i]['nome'];
+        opt.value = usuarios[i]['geradorID'];
+        opt.id = usuarios[i]['geradorID'];
+        idElemento.appendChild(opt);
+    }
 }
 
 function mostraAlerta(mensagem) {

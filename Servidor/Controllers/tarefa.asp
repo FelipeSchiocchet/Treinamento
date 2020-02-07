@@ -27,10 +27,8 @@ function buscaUsuarios
     sqlEst = "SELECT * FROM [treinamento].[dbo].[usuario]"
     Set recordSet=Server.CreateObject("ADODB.recordset")
     recordSet.Open sqlEst, cn,&H0001
-
     response.Write "{"
     response.Write """Usuarios"":["
-
     Do While (not recordSet.EOF)
         response.Write  "{"
         response.Write      """geradorID"": " & recordSet("usuid")
@@ -41,7 +39,6 @@ function buscaUsuarios
         end if   
         recordSet.MoveNext
     loop  
-    
     response.Write "]"
     response.Write "}"
     recordSet.Close
@@ -66,9 +63,7 @@ function FormatarDataBanco(dataSemFormato)
 end function
 
 function colocarDados()
-
     tarID = CInt(request("tarID")) 
-    
     if tarID <> "" then        
     set objconexao = new Conexao
     set cn = objconexao.AbreConexao()
@@ -99,12 +94,10 @@ function cadastrarTarefa()
     objTarefa.setStatus(request("tarstatus"))
     objTarefa.setDataGeracao(FormatarDataBanco(request("tardata")))
     tarID = objTarefa.InsercaoTarefa(cn,ObjTarefa)     
-
     response.Write  "{"
     response.Write      """sucesso"":""true"""
     response.Write      ",""tarID"": " & tarID 
     response.Write  "}"
-    
     objconexao.Fecharconexao(cn)
 end function
 
@@ -119,7 +112,6 @@ function alterarTarefa()
     objTarefa.setStatus(request("tarstatus"))
     objTarefa.setDataGeracao(FormatarDataBanco(request("tardata")))
     tarID = objTarefa.UpdateTarefa(cn,ObjTarefa)
-
     response.Write  "{"
     response.Write      """sucesso"":""true"""
     response.Write  "}"
@@ -137,7 +129,6 @@ function deletarTarefa()
     response.Write      """sucesso"":""true"""
     response.Write  "}"
     objconexao.Fecharconexao(cn)
-
 end function
 
 function BuscarTarefasPaginadas()
@@ -149,7 +140,6 @@ function BuscarTarefasPaginadas()
     set cn = objconexao.AbreConexao()
     set objTarefa = new cTarefa
     set recordSet = objTarefa.BuscarTarefas(cn, palavraParaPesquisa, colunaOrdenacao)
-    
     if not recordSet.eof then
         intTotal = recordSet.recordcount
         recordSet.pageSize = RegistrosPorPagina
@@ -157,9 +147,9 @@ function BuscarTarefasPaginadas()
         if Npagina <= 0 then
                 Npagina = 1
         end if    
-        If Npagina > Ndepaginas Then
+        if Npagina > Ndepaginas then
             Npagina = Ndepaginas
-        End if
+        end if
         recordSet.AbsolutePage = Npagina
         fimPagina = registrosPorPagina * Npagina 
         registrosdaPagina = 0    
@@ -207,7 +197,6 @@ function salvarStatuseTitulo()
     response.Write  "{"
     response.Write      """sucesso"":""true"""
     response.Write  "}"
-    objconexao.Fecharconexao(cn)
-    
+    objconexao.Fecharconexao(cn) 
 end function
 %>

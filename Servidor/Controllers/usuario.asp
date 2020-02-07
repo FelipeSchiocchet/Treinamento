@@ -27,23 +27,23 @@ function colocarDados
     set objUsuario = new cUsuario
     set rs = objUsuario.BuscarUsuarioPorId(cn, usuId)
     set records = cn.execute("select * from tarefa where geradorID ="& usuid) 
-    if records.eof then
-        geradorID = 0
-    else
-        geradorID = records("geradorID")
-    end if
-    records.Close
+        if records.eof then
+            geradorID = 0
+        else
+            geradorID = records("geradorID")
+        end if
+        records.Close
         if not rs.eof then
-        response.Write  "{"   
-    response.Write      """usuario"": """ & rs("usuario") & """"
-    response.Write      ",""senha"": """ & rs("senha") & """"
-    response.Write      ",""nome"": """ & rs("nome") & """"
-    response.Write      ",""endereco"": """ & rs("endereco") & """"
-    response.Write      ",""cidade"": """ & rs("cidade") & """"
-    response.Write      ",""cep"": """ & rs("cep") & """"
-    response.Write      ",""estadoid"": " & rs("estadoid") & ""
-    response.Write      ",""geradorID"": " & geradorID & ""
-    response.Write  "}"
+            response.Write  "{"   
+            response.Write      """usuario"": """ & rs("usuario") & """"
+            response.Write      ",""senha"": """ & rs("senha") & """"
+            response.Write      ",""nome"": """ & rs("nome") & """"
+            response.Write      ",""endereco"": """ & rs("endereco") & """"
+            response.Write      ",""cidade"": """ & rs("cidade") & """"
+            response.Write      ",""cep"": """ & rs("cep") & """"
+            response.Write      ",""estadoid"": " & rs("estadoid") & ""
+            response.Write      ",""geradorID"": " & geradorID & ""
+            response.Write  "}"
         end if
     end if
     rs.Close
@@ -61,13 +61,12 @@ function cadastrarUsuario()
     ObjUsuario.setCidade(request("cidade"))
     ObjUsuario.setCep(request("cep"))
     ObjUsuario.setIdEstado(request("estadoid"))
-    usuid = objUsuario.InsercaoUsuario(cn, objUsuario)     
-
+    usuid = objUsuario.InsercaoUsuario(cn, objUsuario)
     response.Write  "{"
     response.Write      """sucesso"":""true"""
     response.Write      ",""UsuID"": " & usuid 
     response.Write  "}"
-
+    rs.Close
     objconexao.Fecharconexao(cn)
 end function
 
@@ -84,10 +83,11 @@ function alterarUsuario()
     ObjUsuario.setCep(request("cep"))
     ObjUsuario.setIdEstado(request("estadoid"))
     rs = ObjUsuario.UpdateUsuario(cn, ObjUsuario)  
-    
     response.Write  "{"
     response.Write      """sucesso"":""true"""
     response.Write  "}"
+    rs.Close
+    objconexao.Fecharconexao(cn)
 end function
 
 function deletarUsuario()
@@ -100,15 +100,14 @@ function deletarUsuario()
     response.Write  "{"
     response.Write      """sucesso"":""true"""
     response.Write  "}"
-
+    rs.Close
+    objconexao.Fecharconexao(cn)
 end function
 
 function limparCampos()
-    
     response.Write  "{"
     response.Write      """sucesso"":""true"""
     response.Write  "}"
-
 end function 
 
 function BuscarUsuariosPaginados()
@@ -117,7 +116,6 @@ function BuscarUsuariosPaginados()
     set cn = objconexao.AbreConexao()
     set objUsuario = new cUsuario
     set recordSet = ObjUsuario.BuscarUsuarios(cn,palavraParaPesquisa)
-   
     if not recordSet.eof then
         intTotal = recordSet.recordcount
         recordSet.pageSize = RegistrosPorPagina
@@ -125,9 +123,9 @@ function BuscarUsuariosPaginados()
         if Npagina <= 0 then
                 Npagina = 1
         end if    
-        If Npagina > Ndepaginas Then
+        if Npagina > Ndepaginas then
             Npagina = Ndepaginas
-        End if
+        end if
         recordSet.AbsolutePage = Npagina
         fimPagina = registrosPorPagina * Npagina  
         registrosdaPagina = 0    
@@ -156,6 +154,5 @@ function BuscarUsuariosPaginados()
         response.Write "}" 
     end if
     recordSet.close()
-    
 end function 
 %>

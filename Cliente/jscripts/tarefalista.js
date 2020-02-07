@@ -84,7 +84,6 @@ function PreencheTabela(dados) {
     if (!dados) {
         return;
     }
-
     var dadosCabecalho = Object.keys(dados.Dados[0]);
     var dadosCorpo = dados.Dados;
     var dadosRodape = {
@@ -193,7 +192,6 @@ function TabelaCriarRodape(tabela, dados) {
     var liInfo = document.createElement("li");//<li></li>;
     liInfo.innerText = "Mostrando " + dados.RegistrosPorPagina + " de " + dados.TotalRegistros + " Registros";// Mostrando 2 de 2 registros
 
-
     ul.appendChild(liVoltaUmaPagina);
     ul.appendChild(inputPagina);
     ul.appendChild(liAvancaUmaPagina);
@@ -284,12 +282,10 @@ function editarTitulo(e) {
         var remove = e.currentTarget;
         remove.remove();      
     });
-
     e.currentTarget.appendChild(input);
  }   
 
 function salvaTarefa(txt, id) {
-
     return $.ajax({
         url: "../Servidor/Controllers/tarefa.asp",
         type: 'POST',
