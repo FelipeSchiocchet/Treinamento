@@ -88,9 +88,9 @@ function TabelaCriarRodape(tabela, dados) {
     var tfoot = tabela.createTFoot(); //<tfoot></tfoot>
     var row = tfoot.insertRow(0); //<tr></tr>
     var cell2 = row.insertCell(0);//<th></th>
-    cell2.colSpan = 2;
+    cell2.colSpan = 5;
     var cell = row.insertCell(0);//<th></th>
-    cell.colSpan = 4;
+    cell.colSpan = 1;
     var div = document.createElement("div");//<div></div>
     div.setAttribute("class", "pagination");//<div class="pagination">
     var div2 = document.createElement("div");//<div></div>
@@ -165,6 +165,7 @@ function AdicionarEventos(dados) {
         }
     });
 }
+
 function voltar(e) {
     PaginaPesquisa = Number(PaginaPesquisa - 1);
     var table = document.getElementById("tblUsuarios")
@@ -184,8 +185,9 @@ function avancar(e) {
 }
 
 function input(dados) {
-    PaginaPesquisa = isNaN($input.value) ? 1 : Number($input.value);
+    PaginaPesquisa = isNaN($input.value) ? 0 : Number($input.value);
     if (PaginaPesquisa <= 0) {
+        mostraAlerta("Caracter inválido, voltando para a primeira página")
         PaginaPesquisa = 1
     }
     if (PaginaPesquisa > dados.TotalPaginas) {
@@ -196,4 +198,8 @@ function input(dados) {
         table.deleteRow(0);
     }
     BuscarUsuarios("BuscarUsuariosPaginados", RegistrosPorPagina, PaginaPesquisa);
+}
+
+function mostraAlerta(mensagem) {
+    alert(mensagem);
 }

@@ -240,8 +240,8 @@ thead, tfoot {
     display: inline-block;
     font-weight: 900;
 }
-/*estilos da p�gina testes.asp*/
+/*estilos da página header.asp*/
 
-#my_form {
-    display: none;
+header {
+    display: block;
 }

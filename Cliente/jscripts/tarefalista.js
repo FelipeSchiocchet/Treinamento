@@ -103,9 +103,9 @@ function TabelaCriarRodape(tabela, dados) {
     var tfoot = tabela.createTFoot();//<tfoot></tfoot>
     var row = tfoot.insertRow(0);//<tr></tr>
     var cell2 = row.insertCell(0);//<th></th>
-    cell2.colSpan = 1;
+    cell2.colSpan = 4;
     var cell = row.insertCell(0);//<th></th>
-    cell.colSpan = 4;
+    cell.colSpan = 1;
     var div = document.createElement("div");//<div></div>
     div.setAttribute("class", "pagination");//<div class="pagination">
     var div2 = document.createElement("div");//<div></div>
@@ -161,6 +161,7 @@ function TabelaCriarRodape(tabela, dados) {
 }
 
 function mudarImagem(e) {
+    debugger;
     var objImagem = e.currentTarget;
     if (objImagem.src.indexOf("0") > -1) {
         objImagem.src = "./imagens/7.gif";
@@ -188,6 +189,7 @@ function mudarImagem(e) {
             "id": objImagem.id
         },
         success: function (status) {
+            debugger;
             if (objImagem.src.indexOf("1") > -1) {
                 alert('Tarefa não iniciada')
             }
@@ -255,7 +257,6 @@ function AdicionarEventos(dados) {
     $input = document.getElementById("input");
     $botaovoltar = document.getElementById("botaovoltar");
     $botaoavancar = document.getElementById("botaoavancar");
-
     $botaovoltar.addEventListener("click", function (e) {
         voltar(e);
     });
@@ -271,14 +272,6 @@ function AdicionarEventos(dados) {
     });
 }
 
-function avancar(e) {
-    PaginaPesquisa = Number(PaginaPesquisa + 1);
-    var table = document.getElementById("tblTarefas")
-    while (table.rows.length > 0) {
-        table.deleteRow(0);
-    }
-    BuscarTarefas("BuscarTarefasPaginadas", RegistrosPorPagina, PaginaPesquisa);
-}
 
 function voltar(e) {
     PaginaPesquisa = Number(PaginaPesquisa - 1);
@@ -289,9 +282,19 @@ function voltar(e) {
     BuscarTarefas("BuscarTarefasPaginadas", RegistrosPorPagina, PaginaPesquisa);
 }
 
+function avancar(e) {
+    PaginaPesquisa = Number(PaginaPesquisa + 1);
+    var table = document.getElementById("tblTarefas")
+    while (table.rows.length > 0) {
+        table.deleteRow(0);
+    }
+    BuscarTarefas("BuscarTarefasPaginadas", RegistrosPorPagina, PaginaPesquisa);
+}
+
 function input(dados) {
-    PaginaPesquisa = isNaN($input.value) ? 1 : Number($input.value);
+    PaginaPesquisa = isNaN($input.value) ? 0 : Number($input.value);
     if (PaginaPesquisa <= 0) {
+        mostraAlerta("Caracter inválido, voltando para a primeira página")
         PaginaPesquisa = 1
     }
     if (PaginaPesquisa > dados.TotalPaginas) {
@@ -302,4 +305,8 @@ function input(dados) {
         table.deleteRow(0);
     }
     BuscarTarefas("BuscarTarefasPaginadas", RegistrosPorPagina, PaginaPesquisa);
+}
+
+function mostraAlerta(mensagem) {
+    alert(mensagem);
 }

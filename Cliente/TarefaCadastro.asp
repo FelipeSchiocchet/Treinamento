@@ -6,8 +6,9 @@
     <meta charset="utf-8">
     </head>
     <body>
+    <p><!--#include file="header.asp"--></p>
         <h1 class="u">Tarefa</h1>
-        <p><a href="http://localhost/treinamento/Cliente/lista.asp">Voltar para a listagem de tarefas</a></p>
+        <p><a href="lista.asp">Voltar para a listagem de tarefas</a></p>
        <form method="post">
             Título:
             <input type="text" id="tarTitulo" name="tarTitulo" class="titulo"><br>

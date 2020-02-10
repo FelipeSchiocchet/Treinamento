@@ -54,12 +54,12 @@ function cadastrarUsuario()
     set objconexao = new Conexao
     set cn = objconexao.AbreConexao()
     set objUsuario = new cUsuario
-    ObjUsuario.setUsuario(request("usuario"))
-    ObjUsuario.setSenha(request("senha"))
-    ObjUsuario.setNome(request("nome"))
-    ObjUsuario.setEndereco(request("endereco"))
-    ObjUsuario.setCidade(request("cidade"))
-    ObjUsuario.setCep(request("cep"))
+    ObjUsuario.setUsuario(replace(request("usuario"),"'","''"))
+    ObjUsuario.setSenha(replace(request("senha"),"'","''"))
+    ObjUsuario.setNome(replace(request("nome"),"'","''"))
+    ObjUsuario.setEndereco(replace(request("endereco"),"'","''"))
+    ObjUsuario.setCidade(replace(request("cidade"),"'","''"))
+    ObjUsuario.setCep(replace(request("cep"),"'","''"))
     ObjUsuario.setIdEstado(request("estadoid"))
     usuid = objUsuario.InsercaoUsuario(cn, objUsuario)
     response.Write  "{"
@@ -74,12 +74,12 @@ function alterarUsuario()
     set cn = objconexao.AbreConexao()
     set objUsuario = new cUsuario
     ObjUsuario.setId(CInt(request("usuid")))
-    ObjUsuario.setUsuario(request("usuario"))
-    ObjUsuario.setSenha(request("senha"))
-    ObjUsuario.setNome(request("nome"))
-    ObjUsuario.setEndereco(request("endereco"))
-    ObjUsuario.setCidade(request("cidade"))
-    ObjUsuario.setCep(request("cep"))
+    ObjUsuario.setUsuario(replace(request("usuario"),"'","''"))
+    ObjUsuario.setSenha(replace(request("senha"),"'","''"))
+    ObjUsuario.setNome(replace(request("nome"),"'","''"))
+    ObjUsuario.setEndereco(replace(request("endereco"),"'","''"))
+    ObjUsuario.setCidade(replace(request("cidade"),"'","''"))
+    ObjUsuario.setCep(replace(request("cep"),"'","''"))
     ObjUsuario.setIdEstado(request("estadoid"))
     rs = ObjUsuario.UpdateUsuario(cn, ObjUsuario)  
     response.Write  "{"
@@ -130,12 +130,12 @@ function BuscarUsuariosPaginados()
         response.Write """Dados"":["
          Do While not recordSet.eof and (recordSet.AbsolutePosition <= fimPagina)
             response.Write  "{"
-                response.Write      """Nome"": """ & recordSet("nome") & """"
-                response.Write      ",""Usuario"": """ & recordSet("usuario") & """"
-                response.Write      ",""Endereco"": """ & recordSet("endereco") & """"
-                response.Write      ",""Cidade"": """ & recordSet("cidade") & """"
-                response.Write      ",""Cep"": """ & recordSet("cep") & """"
-                response.Write      ",""usuid"":""" & recordSet("usuid") &""""
+                response.Write      """Nome"": """ & replace(recordSet("nome"),"'","''") & """"
+                response.Write      ",""Usuario"": """ & replace(recordSet("usuario"),"'","''") & """"
+                response.Write      ",""Endereco"": """ & replace(recordSet("endereco"),"'","''") & """"
+                response.Write      ",""Cidade"": """ & replace(recordSet("cidade"),"'","''") & """"
+                response.Write      ",""Cep"": """ & replace(recordSet("cep"),"'","''") & """"
+                response.Write      ",""usuid"":""" & replace(recordSet("usuid"),"'","''") &""""
             response.Write  "}"
             registrosdaPagina = registrosdaPagina + 1
             recordSet.MoveNext

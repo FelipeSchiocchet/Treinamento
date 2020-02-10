@@ -1,11 +1,18 @@
-<html>
+<html class="font">
     <head>
         <title>Header</title>
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <meta charset="utf-8"> 
+
     </head>
-    <body>
-<p><a href="listausuario.asp">listagem de usuários</a></p>
-<p><a href="lista.asp">listagem de tarefas</a></p>
-<p><a href="usuariocadastro.asp">Cadastro de usuários</a></p>
-<p><a href="TarefaCadastro.asp">Cadastro de tarefas</a></p>
+
+    <body> 
+    <tr>
+        <th><a href="listausuario.asp">Listagem de UsuÃ¡rios</a></th>
+        <th><a href="lista.asp">Listagem de Tarefas</a></th>
+        <th><a href="usuariocadastro.asp">Cadastro de UsuÃ¡rios</a></th>
+        <th><a href="TarefaCadastro.asp">Cadastro de Tarefas</a></th>
+    </tr>
     </body>
+    
 </html>

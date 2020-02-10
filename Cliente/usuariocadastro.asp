@@ -7,8 +7,9 @@
         <meta charset="utf-8">
     </head>
     <body>
+    <p><!--#include file="header.asp"--></p>
         <h1 class="u">Usuário</h1>
-        <p><a href="http://localhost/treinamento/Cliente/listausuario.asp">Voltar para a listagem</a></p>           
+        <p><a href="listausuario.asp">Voltar para a listagem</a></p>           
         <form method="post">
             <input type="hidden" id="geradorID" name="geradorID">
             Usuário:
