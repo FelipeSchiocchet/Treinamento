@@ -85,12 +85,10 @@ end function
 
 function colocarData()
     dataAtual = converterData(now)
-
     response.Write  "{"
     response.Write      """sucesso"":""true"""
     response.Write      ",""dataAtual"": """ & dataAtual & """"
     response.Write  "}"
-
 end function
 
 function cadastrarTarefa()

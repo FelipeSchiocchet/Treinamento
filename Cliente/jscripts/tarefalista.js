@@ -86,6 +86,7 @@ function TabelaCriarCorpo(tabela, dadosCorpo) {
             if (key == 'Status') {
                 var imagem = document.createElement("img");
                 imagem.src = "./imagens/" + element[key] + ".gif";
+                imagem.setAttribute('Status',element[key]);
                 imagem.id = element['tarID'];
                 imagem.addEventListener("dblclick", function (e) {
                     mudarImagem(e);
@@ -163,22 +164,38 @@ function TabelaCriarRodape(tabela, dados) {
 function mudarImagem(e) {
     debugger;
     var objImagem = e.currentTarget;
-    if (objImagem.src.indexOf("0") > -1) {
+    if (objImagem.getAttribute('status') == "0") {
         objImagem.src = "./imagens/7.gif";
         status = 7;
     }
-    else if (objImagem.src.indexOf("7") > -1) {
+    else if (objImagem.getAttribute('status') == "7") {
         objImagem.src = "./imagens/9.gif";
         status = 9;
     }
-    else if (objImagem.src.indexOf("9") > -1) {
+    else if (objImagem.getAttribute('status') == "9") {
         objImagem.src = "./imagens/1.gif";
         status = 1;
     }
-    else if (objImagem.src.indexOf("1") > -1) {
+    else if (objImagem.getAttribute('status') == "1") {
         objImagem.src = "./imagens/0.gif";
         status = 0;
     }
+    // if (objImagem.src.indexOf("0") > -1) {
+    //     objImagem.src = "./imagens/7.gif";
+    //     status = 7;
+    // }
+    // else if (objImagem.src.indexOf("7") > -1) {
+    //     objImagem.src = "./imagens/9.gif";
+    //     status = 9;
+    // }
+    // else if (objImagem.src.indexOf("9") > -1) {
+    //     objImagem.src = "./imagens/1.gif";
+    //     status = 1;
+    // }
+    // else if (objImagem.src.indexOf("1") > -1) {
+    //     objImagem.src = "./imagens/0.gif";
+    //     status = 0;
+    // }
     return $.ajax({
         url: "../Servidor/Controllers/tarefa.asp",
         type: 'POST',
@@ -189,17 +206,17 @@ function mudarImagem(e) {
         },
         success: function (status) {
             debugger;
-            if (objImagem.src.indexOf("1") > -1) {
-                alert('Tarefa não iniciada')
-            }
-            else if (objImagem.src.indexOf("0") > -1) {
-                alert('Tarefa em andamento')
-            }
-            else if (objImagem.src.indexOf("7") > -1) {
+            if (objImagem.getAttribute('status') == "0") {
                 alert('Tarefa Cancelada')
             }
-            else if (objImagem.src.indexOf("9") > -1) {
+            else if (objImagem.getAttribute('status') == "7") {
                 alert('Tarefa concluída')
+            }
+            else if (objImagem.getAttribute('status') == "9") {
+                alert('Tarefa não iniciada')
+            }
+            else if (objImagem.getAttribute('status') == "1") {
+                alert('Tarefa em andamento')
             }
             location.reload();
         },
