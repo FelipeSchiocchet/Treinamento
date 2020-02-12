@@ -178,7 +178,6 @@ function mudarImagem(e) {
     else if (objImagem.src.indexOf("1") > -1) {
         objImagem.src = "./imagens/0.gif";
         status = 0;
-        
     }
     return $.ajax({
         url: "../Servidor/Controllers/tarefa.asp",
@@ -271,7 +270,6 @@ function AdicionarEventos(dados) {
         }
     });
 }
-
 
 function voltar(e) {
     PaginaPesquisa = Number(PaginaPesquisa - 1);

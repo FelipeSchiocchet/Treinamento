@@ -1,8 +1,10 @@
 window.addEventListener('DOMContentLoaded', function () {
     const queryString = window.location.search;
+    debugger;
     const urlParams = new URLSearchParams(queryString);
     var tarID = urlParams.get("tarID");
     AdicionarEventos(tarID);
+    var nada = 0;
     if (tarID > 0) {
         cadastrar.style.display = 'none';
         alterar.style.display = 'inline';
@@ -11,6 +13,7 @@ window.addEventListener('DOMContentLoaded', function () {
     } else {
         var geradorID = 1;
         buscaUsuarios(document.getElementById("geradorID"), geradorID);
+        preencherdata(nada);
     }
 });
 
@@ -92,7 +95,6 @@ function alterarTarefa(event, tarID) {
 
 function deletarTarefa(event, tarID) {
     event.preventDefault();
-
     $.ajax({
         type: "POST",
         url: "../Servidor/Controllers/tarefa.asp",
@@ -115,10 +117,6 @@ function deletarTarefa(event, tarID) {
 function validarDados() {
     if (tarTitulo.value == "") {
         mostraAlerta("Preencha o campo Título!");
-        return false;
-    }
-    else if (geradorID.value == "") {
-        mostraAlerta("Preencha o campo Gerador!");
         return false;
     }
     else if (tarDescricao.value == "") {
@@ -153,6 +151,25 @@ function prencherdados(tarID) {
                 document.getElementById("tarDescricao").value = data.tarDescricao;
                 var geradorID = data.geradorID;
                 buscaUsuarios(document.getElementById("geradorID"), geradorID);
+            }
+        },
+        error: function (obj, err) {
+            mostraAlerta("Servidor com erro, por favor usar mais tarde. " + err)
+        }
+    })
+}
+
+function preencherdata(nada) {
+    debugger;
+    return $.ajax({
+        type: "POST",
+        url: "../Servidor/Controllers/tarefa.asp",
+        data: {
+            fnTarget: "colocarData"
+        },
+        success: function (data) {
+            if (data) {
+                document.getElementById("tarData").value = data.dataAtual;
             }
         },
         error: function (obj, err) {

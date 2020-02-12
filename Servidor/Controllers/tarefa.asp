@@ -83,6 +83,16 @@ function colocarDados()
     objconexao.Fecharconexao(cn)
 end function
 
+function colocarData()
+    dataAtual = converterData(now)
+
+    response.Write  "{"
+    response.Write      """sucesso"":""true"""
+    response.Write      ",""dataAtual"": """ & dataAtual & """"
+    response.Write  "}"
+
+end function
+
 function cadastrarTarefa()
     set objconexao = new Conexao
     set cn = objconexao.AbreConexao()
@@ -90,7 +100,7 @@ function cadastrarTarefa()
     objTarefa.setTitulo(replace(request("tartitulo"),"'","''"))
     objTarefa.setGeradorId(replace(request("geradorID"),"'","''"))
     objTarefa.setDescricao(replace(request("tarDescricao"),"'","''"))
-    objTarefa.setStatus(replace(request("tarstatus"),"'","''"))
+    objTarefa.setStatus(request("tarstatus"))
     objTarefa.setDataGeracao(FormatarDataBanco(request("tardata")))
     tarID = objTarefa.InsercaoTarefa(cn,ObjTarefa)     
     response.Write  "{"
