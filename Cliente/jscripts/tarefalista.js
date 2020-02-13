@@ -180,22 +180,6 @@ function mudarImagem(e) {
         objImagem.src = "./imagens/0.gif";
         status = 0;
     }
-    // if (objImagem.src.indexOf("0") > -1) {
-    //     objImagem.src = "./imagens/7.gif";
-    //     status = 7;
-    // }
-    // else if (objImagem.src.indexOf("7") > -1) {
-    //     objImagem.src = "./imagens/9.gif";
-    //     status = 9;
-    // }
-    // else if (objImagem.src.indexOf("9") > -1) {
-    //     objImagem.src = "./imagens/1.gif";
-    //     status = 1;
-    // }
-    // else if (objImagem.src.indexOf("1") > -1) {
-    //     objImagem.src = "./imagens/0.gif";
-    //     status = 0;
-    // }
     return $.ajax({
         url: "../Servidor/Controllers/tarefa.asp",
         type: 'POST',
