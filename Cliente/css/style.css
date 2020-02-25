@@ -242,6 +242,9 @@ thead, tfoot {
 }
 /*estilos da página header.asp*/
 
-header {
+.header {
     display: block;
+    height: 20px;
+    position: relative;
+    margin-left: 25%;
 }

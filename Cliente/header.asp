@@ -7,12 +7,12 @@
     </head>
 
     <body> 
-    <tr>
-        <th><a href="listausuario.asp">Listagem de Usuários</a></th>
-        <th><a href="lista.asp">Listagem de Tarefas</a></th>
-        <th><a href="usuariocadastro.asp">Cadastro de Usuários</a></th>
-        <th><a href="TarefaCadastro.asp">Cadastro de Tarefas</a></th>
-    </tr>
+        <div class="header">
+            <button onclick="window.location.href = 'listausuario.asp';">Listagem de Usuários</button>
+            <button onclick="window.location.href = 'lista.asp';">Listagem de Tarefas</button>
+            <button onclick="window.location.href = 'usuariocadastro.asp';">Cadastro de Usuários</button>
+            <button onclick="window.location.href = 'TarefaCadastro.asp';">Cadastro de Tarefas</button>
+        </div>  
     </body>
     
 </html>
